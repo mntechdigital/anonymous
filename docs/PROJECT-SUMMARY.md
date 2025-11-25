@@ -5,12 +5,14 @@
 A comprehensive **Facebook Page Automation Platform** with:
 
 ### ✅ Complete Database Schema (`prisma/schema.prisma`)
+
 - **3 User Types**: Super Admin, Admin, Page Owner
 - **8 Core Models**: User, Organization, FacebookPage, PageAccess, Post, ScheduledPost, PostAnalytics, PageAnalytics
 - **Activity Logging**: Full audit trail
 - **Proper Relations**: All foreign keys and indexes configured
 
 ### ✅ API Documentation (`docs/API-DOCUMENTATION.md`)
+
 - **40+ Endpoints** covering all functionality
 - **Clear Request/Response examples**
 - **Access control rules** for each endpoint
@@ -18,6 +20,7 @@ A comprehensive **Facebook Page Automation Platform** with:
 - **Facebook Graph API integration guide**
 
 ### ✅ Setup Guide (`docs/SETUP-GUIDE.md`)
+
 - Step-by-step installation
 - Database initialization
 - Required dependencies
@@ -25,6 +28,7 @@ A comprehensive **Facebook Page Automation Platform** with:
 - Test commands
 
 ### ✅ Project Overview (`PROJECT-OVERVIEW.md`)
+
 - Architecture diagram
 - Features list
 - Tech stack
@@ -68,12 +72,14 @@ A comprehensive **Facebook Page Automation Platform** with:
 ### 1. **Dual Authentication System**
 
 **JWT-Based (Super Admin & Admin)**
+
 - Email/password login
 - JWT token with 24h expiration
 - Stored in database with bcrypt hashing
 - API endpoint: `POST /api/v1/auth/login`
 
 **Facebook OAuth (Page Owner)**
+
 - Login via Facebook button
 - NextAuth.js handles OAuth flow
 - Stores long-lived user token
@@ -125,16 +131,16 @@ Use for Publishing Posts
 
 ### 4. **Access Control Matrix**
 
-| Action | Super Admin | Admin | Page Owner |
-|--------|-------------|-------|------------|
-| View all organizations | ✅ | Own only | Own only |
-| Create organization | ✅ | ❌ | ❌ |
-| Add Facebook page | ✅ | ✅ | ✅ (own) |
-| View page analytics | ✅ | Org pages | Own pages |
-| Create post | ✅ | ✅ (with permission) | ❌ |
-| Schedule post | ✅ | ✅ (with permission) | ❌ |
-| Manage users | ✅ | Org only | ❌ |
-| System settings | ✅ | ❌ | ❌ |
+| Action                 | Super Admin | Admin                | Page Owner |
+| ---------------------- | ----------- | -------------------- | ---------- |
+| View all organizations | ✅          | Own only             | Own only   |
+| Create organization    | ✅          | ❌                   | ❌         |
+| Add Facebook page      | ✅          | ✅                   | ✅ (own)   |
+| View page analytics    | ✅          | Org pages            | Own pages  |
+| Create post            | ✅          | ✅ (with permission) | ❌         |
+| Schedule post          | ✅          | ✅ (with permission) | ❌         |
+| Manage users           | ✅          | Org only             | ❌         |
+| System settings        | ✅          | ❌                   | ❌         |
 
 ### 5. **Permission System**
 
@@ -147,6 +153,7 @@ Each user can have different permissions per page via `PageAccess`:
 - `canManage` - Edit page settings
 
 **Example:**
+
 ```typescript
 // User "john@example.com" (Admin) has these permissions for "Page A":
 {
@@ -163,22 +170,27 @@ Each user can have different permissions per page via `PageAccess`:
 ## 📊 Database Tables Overview
 
 ### Users & Auth
+
 - `users` - All users (Super Admin, Admin, Page Owner)
 - `organizations` - Multi-tenant organizations
 
 ### Facebook Integration
+
 - `facebook_pages` - Page metadata + access tokens (encrypted)
 - `page_access` - Granular permissions per user per page
 
 ### Content Management
+
 - `posts` - Published posts
 - `scheduled_posts` - Future posts queue
 
 ### Analytics
+
 - `post_analytics` - Engagement per post
 - `page_analytics` - Daily page metrics
 
 ### Audit
+
 - `activity_logs` - All system actions
 - `system_settings` - App configuration
 
@@ -187,6 +199,7 @@ Each user can have different permissions per page via `PageAccess`:
 ## 🔄 Background Jobs Needed
 
 ### 1. Scheduled Post Publisher
+
 **Frequency:** Every 1 minute  
 **Function:** Publish pending scheduled posts
 
@@ -194,7 +207,7 @@ Each user can have different permissions per page via `PageAccess`:
 async function publishScheduledPosts() {
   const pendingPosts = await prisma.scheduledPost.findMany({
     where: {
-      status: 'PENDING',
+      status: "PENDING",
       scheduledTime: { lte: new Date() },
     },
     include: { page: true },
@@ -205,7 +218,7 @@ async function publishScheduledPosts() {
       // Update status
       await prisma.scheduledPost.update({
         where: { id: scheduledPost.id },
-        data: { status: 'PROCESSING' },
+        data: { status: "PROCESSING" },
       });
 
       // Decrypt page token
@@ -226,7 +239,7 @@ async function publishScheduledPosts() {
           postId: result.id,
           message: scheduledPost.message,
           type: scheduledPost.type,
-          status: 'PUBLISHED',
+          status: "PUBLISHED",
           pageId: scheduledPost.pageId,
           organizationId: scheduledPost.organizationId,
           createdById: scheduledPost.createdById,
@@ -238,7 +251,7 @@ async function publishScheduledPosts() {
       await prisma.scheduledPost.update({
         where: { id: scheduledPost.id },
         data: {
-          status: 'PUBLISHED',
+          status: "PUBLISHED",
           publishedPostId: post.id,
           publishedAt: new Date(),
         },
@@ -248,7 +261,7 @@ async function publishScheduledPosts() {
       await prisma.activityLog.create({
         data: {
           userId: scheduledPost.createdById,
-          activityType: 'POST_PUBLISHED',
+          activityType: "POST_PUBLISHED",
           description: `Published scheduled post to ${scheduledPost.page.pageName}`,
           metadata: { postId: post.id, scheduledPostId: scheduledPost.id },
         },
@@ -258,7 +271,7 @@ async function publishScheduledPosts() {
       await prisma.scheduledPost.update({
         where: { id: scheduledPost.id },
         data: {
-          status: 'FAILED',
+          status: "FAILED",
           errorMessage: error.message,
         },
       });
@@ -268,6 +281,7 @@ async function publishScheduledPosts() {
 ```
 
 ### 2. Analytics Sync
+
 **Frequency:** Daily at 00:00  
 **Function:** Sync insights from Facebook
 
@@ -285,7 +299,12 @@ async function syncAnalytics() {
       // Get page insights (last 30 days)
       const pageInsights = await fb.getPageInsights(
         page.pageId,
-        ['page_impressions', 'page_engaged_users', 'page_views_total', 'page_fans'],
+        [
+          "page_impressions",
+          "page_engaged_users",
+          "page_views_total",
+          "page_fans",
+        ],
         getDate30DaysAgo(),
         getToday()
       );
@@ -330,6 +349,7 @@ async function syncAnalytics() {
 ```
 
 ### 3. Token Validator
+
 **Frequency:** Every 6 hours  
 **Function:** Validate Facebook tokens
 
@@ -369,6 +389,7 @@ async function validateTokens() {
 ## 📁 Required Files to Create
 
 ### 1. Core Utilities
+
 - ✅ `src/lib/prisma.ts` - Prisma client singleton
 - ✅ `src/lib/jwt.ts` - JWT sign/verify functions
 - ✅ `src/lib/encryption.ts` - Token encryption/decryption
@@ -377,6 +398,7 @@ async function validateTokens() {
 - ⏳ `src/lib/permissions.ts` - Permission checks
 
 ### 2. API Routes
+
 - ⏳ `src/app/api/v1/auth/login/route.ts`
 - ⏳ `src/app/api/v1/users/route.ts`
 - ⏳ `src/app/api/v1/organizations/route.ts`
@@ -387,12 +409,14 @@ async function validateTokens() {
 - ⏳ `src/app/api/v1/permissions/route.ts`
 
 ### 3. Background Jobs
+
 - ⏳ `src/jobs/publish-scheduled-posts.ts`
 - ⏳ `src/jobs/sync-analytics.ts`
 - ⏳ `src/jobs/validate-tokens.ts`
 - ⏳ `src/jobs/scheduler.ts` - Job orchestrator
 
 ### 4. Dashboard UI
+
 - ⏳ `src/app/dashboard/page.tsx` - Main dashboard
 - ⏳ `src/app/dashboard/pages/page.tsx` - Pages list
 - ⏳ `src/app/dashboard/posts/page.tsx` - Posts manager
@@ -405,6 +429,7 @@ async function validateTokens() {
 ## 🚀 Next Steps
 
 ### Phase 1: Backend Setup (Week 1)
+
 1. ✅ Install Prisma and dependencies
 2. ✅ Run database migrations
 3. ✅ Seed super admin user
@@ -413,6 +438,7 @@ async function validateTokens() {
 6. ⏳ Test login endpoints
 
 ### Phase 2: API Development (Week 2-3)
+
 1. ⏳ Implement all CRUD routes
 2. ⏳ Add auth middleware
 3. ⏳ Add permission checks
@@ -420,6 +446,7 @@ async function validateTokens() {
 5. ⏳ Document any edge cases
 
 ### Phase 3: Background Jobs (Week 4)
+
 1. ⏳ Setup job scheduler (node-cron or similar)
 2. ⏳ Implement scheduled post publisher
 3. ⏳ Implement analytics sync
@@ -427,6 +454,7 @@ async function validateTokens() {
 5. ⏳ Test job execution
 
 ### Phase 4: Frontend Dashboard (Week 5-7)
+
 1. ⏳ Design dashboard layout
 2. ⏳ Implement authentication pages
 3. ⏳ Build page management UI
@@ -436,6 +464,7 @@ async function validateTokens() {
 7. ⏳ Build user management (Admin only)
 
 ### Phase 5: Testing & Deployment (Week 8)
+
 1. ⏳ Unit tests
 2. ⏳ Integration tests
 3. ⏳ E2E tests
