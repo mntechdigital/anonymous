@@ -1,110 +1,593 @@
-# Facebook Graph API Endpoints Documentation
+# Facebook Page Automation Platform - API Documentation
 
-**Version:** v24.0  
-**Base URL:** `https://graph.facebook.com/v24.0`
+**Version:** v1.0  
+**Base URL:** `/api/v1`  
+**Facebook Graph API:** `https://graph.facebook.com/v24.0`
 
-This documentation covers Facebook Graph API endpoints for managing Facebook Pages, posts, analytics, and access tokens for organizations.
+This documentation covers the complete API for a multi-tenant Facebook Page automation platform with three user types:
+
+1. **Super Admin** - Full system access, can see all organizations, pages, and analytics
+2. **Admin** - Organization-level access, can manage their organization's pages and posts
+3. **Page Owner** - Facebook OAuth users who can view their own page analytics
 
 ---
 
 ## Table of Contents
 
-1. [Authentication & Token Management](#authentication--token-management)
-2. [Page Management](#page-management)
-3. [Post Management](#post-management)
-4. [Analytics & Insights](#analytics--insights)
-5. [Scheduled Posts](#scheduled-posts)
-6. [Database Schema](#database-schema)
+1. [Authentication](#authentication)
+2. [User Management](#user-management)
+3. [Organization Management](#organization-management)
+4. [Facebook Page Management](#facebook-page-management)
+5. [Post Management](#post-management)
+6. [Scheduled Posts](#scheduled-posts)
+7. [Analytics](#analytics)
+8. [Permissions](#permissions)
+9. [Activity Logs](#activity-logs)
+10. [Database Schema](#database-schema)
+11. [Facebook Graph API Reference](#facebook-graph-api-reference)
 
 ---
 
-## Authentication & Token Management
+## Authentication
 
-### 1.1 Exchange Short-lived Token for Long-lived User Token
+### 1.1 Super Admin / Admin Login (JWT)
 
-**Endpoint:** `GET /oauth/access_token`
+**Endpoint:** `POST /api/v1/auth/login`
 
-**Description:** Convert a short-lived user access token (valid for hours) to a long-lived token (valid for ~60 days).
+**Description:** Login for Super Admin and Admin users using email/password (JWT-based authentication).
 
-**Required Parameters:**
-
-- `grant_type`: `fb_exchange_token`
-- `client_id`: Your App ID
-- `client_secret`: Your App Secret
-- `fb_exchange_token`: Short-lived user access token
-
-**Request Example:**
-
-```bash
-curl -X GET "https://graph.facebook.com/v24.0/oauth/access_token?\
-grant_type=fb_exchange_token&\
-client_id={app-id}&\
-client_secret={app-secret}&\
-fb_exchange_token={short-lived-token}"
-```
-
-**Response Example:**
+**Request Body:**
 
 ```json
 {
-  "access_token": "EAABsbCS1iHgBO...",
-  "token_type": "bearer",
-  "expires_in": 5183944
+  "email": "admin@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "usr_abc123",
+      "email": "admin@example.com",
+      "name": "John Admin",
+      "role": "ADMIN",
+      "organizationId": "org_xyz789"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400
+  }
 }
 ```
 
 ---
 
-### 1.2 Get Long-lived Page Access Token
+### 1.2 Page Owner Login (Facebook OAuth)
 
-**Endpoint:** `GET /{user-id}/accounts`
+**Endpoint:** `GET /api/auth/signin/facebook`
 
-**Description:** Get long-lived page access tokens from a long-lived user access token. Page tokens don't expire unless invalidated.
+**Description:** Redirect to Facebook OAuth for Page Owner authentication via NextAuth.
 
-**Required Parameters:**
+**Flow:**
 
-- `access_token`: Long-lived user access token
+1. User clicks "Login with Facebook"
+2. Redirects to Facebook OAuth consent screen
+3. User grants permissions
+4. Callback to `/api/auth/callback/facebook`
+5. Creates/updates user in database
+6. Stores Facebook access token
 
-**Permissions Required:**
+**Required Facebook Permissions:**
 
+- `email`
+- `public_profile`
 - `pages_show_list`
 - `pages_read_engagement`
 - `pages_manage_posts`
+- `pages_manage_metadata`
 
-**Request Example:**
+---
 
-```bash
-curl -X GET "https://graph.facebook.com/v24.0/{user-id}/accounts?\
-access_token={long-lived-user-token}"
+### 1.3 Get Current User
+
+**Endpoint:** `GET /api/v1/auth/me`
+
+**Description:** Get current authenticated user details.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
 ```
 
-**Response Example:**
+**Response:**
 
 ```json
 {
-  "data": [
-    {
-      "access_token": "EAABsbCS1iHgBO...",
-      "category": "Brand",
-      "category_list": [
-        {
-          "id": "1605186416478696",
-          "name": "Brand"
-        }
-      ],
-      "name": "My Business Page",
-      "id": "123456789012345",
-      "tasks": ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
-    }
-  ],
-  "paging": {
-    "cursors": {
-      "before": "MTM1MzI2OTg2NDcy...",
-      "after": "MTM1MzI2OTg2NDcy..."
+  "success": true,
+  "data": {
+    "id": "usr_abc123",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "role": "PAGE_OWNER",
+    "authProvider": "FACEBOOK",
+    "organizationId": "org_xyz789",
+    "organization": {
+      "id": "org_xyz789",
+      "name": "My Company"
+    },
+    "lastLoginAt": "2025-11-25T10:30:00Z"
+  }
+}
+```
+
+---
+
+### 1.4 Logout
+
+**Endpoint:** `POST /api/v1/auth/logout`
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Logged out successfully"
+}
+```
+
+---
+
+## User Management
+
+### 2.1 Create User (Admin/Super Admin Only)
+
+**Endpoint:** `POST /api/v1/users`
+
+**Access:** Super Admin, Admin
+
+**Request Body:**
+
+```json
+{
+  "email": "newadmin@example.com",
+  "name": "Jane Admin",
+  "password": "securePassword123",
+  "role": "ADMIN",
+  "organizationId": "org_xyz789"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "usr_def456",
+    "email": "newadmin@example.com",
+    "name": "Jane Admin",
+    "role": "ADMIN",
+    "organizationId": "org_xyz789",
+    "createdAt": "2025-11-25T10:30:00Z"
+  }
+}
+```
+
+---
+
+### 2.2 Get All Users
+
+**Endpoint:** `GET /api/v1/users`
+
+**Access:** Super Admin (all users), Admin (organization users only)
+
+**Query Parameters:**
+
+- `role` (optional): Filter by role (SUPER_ADMIN, ADMIN, PAGE_OWNER)
+- `organizationId` (optional): Filter by organization
+- `page` (optional): Page number (default: 1)
+- `limit` (optional): Items per page (default: 20)
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "users": [
+      {
+        "id": "usr_abc123",
+        "email": "admin@example.com",
+        "name": "John Admin",
+        "role": "ADMIN",
+        "organizationId": "org_xyz789",
+        "isActive": true,
+        "lastLoginAt": "2025-11-25T10:30:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 45,
+      "totalPages": 3
     }
   }
 }
 ```
+
+---
+
+### 2.3 Update User
+
+**Endpoint:** `PATCH /api/v1/users/:userId`
+
+**Access:** Super Admin, Admin (own organization only)
+
+**Request Body:**
+
+```json
+{
+  "name": "Updated Name",
+  "isActive": true
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "usr_abc123",
+    "email": "admin@example.com",
+    "name": "Updated Name",
+    "isActive": true
+  }
+}
+```
+
+---
+
+### 2.4 Delete User
+
+**Endpoint:** `DELETE /api/v1/users/:userId`
+
+**Access:** Super Admin only
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "User deleted successfully"
+}
+```
+
+---
+
+## Organization Management
+
+### 3.1 Create Organization
+
+**Endpoint:** `POST /api/v1/organizations`
+
+**Access:** Super Admin only
+
+**Request Body:**
+
+```json
+{
+  "name": "Acme Corporation",
+  "slug": "acme-corp",
+  "description": "Leading technology company"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "org_xyz789",
+    "name": "Acme Corporation",
+    "slug": "acme-corp",
+    "description": "Leading technology company",
+    "createdAt": "2025-11-25T10:30:00Z"
+  }
+}
+```
+
+---
+
+### 3.2 Get All Organizations
+
+**Endpoint:** `GET /api/v1/organizations`
+
+**Access:** Super Admin (all), Admin (own only)
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "organizations": [
+      {
+        "id": "org_xyz789",
+        "name": "Acme Corporation",
+        "slug": "acme-corp",
+        "isActive": true,
+        "totalPages": 15,
+        "totalUsers": 25,
+        "createdAt": "2025-11-25T10:30:00Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 3.3 Get Organization Details
+
+**Endpoint:** `GET /api/v1/organizations/:orgId`
+
+**Access:** Super Admin, Admin (own only), Page Owner (own only)
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "org_xyz789",
+    "name": "Acme Corporation",
+    "slug": "acme-corp",
+    "description": "Leading technology company",
+    "totalPages": 15,
+    "totalUsers": 25,
+    "totalPosts": 450,
+    "isActive": true,
+    "createdAt": "2025-11-25T10:30:00Z"
+  }
+}
+```
+
+---
+
+## Facebook Page Management
+
+### 4.1 Add Facebook Page
+
+**Endpoint:** `POST /api/v1/pages`
+
+**Access:** All authenticated users
+
+**Description:** Add a new Facebook page to the system. Page Owner users add their own pages via Facebook OAuth. Admins can manually add pages with tokens.
+
+**Request Body:**
+
+```json
+{
+  "pageId": "123456789012345",
+  "pageName": "My Business Page",
+  "pageAccessToken": "EAABsbCS1iHgBO...",
+  "organizationId": "org_xyz789",
+  "category": "Brand",
+  "about": "We help businesses grow online",
+  "website": "https://example.com"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "page_mno456",
+    "pageId": "123456789012345",
+    "pageName": "My Business Page",
+    "category": "Brand",
+    "fanCount": 15420,
+    "followersCount": 15850,
+    "organizationId": "org_xyz789",
+    "addedById": "usr_abc123",
+    "isActive": true,
+    "createdAt": "2025-11-25T10:30:00Z"
+  }
+}
+```
+
+---
+
+### 4.2 Get All Pages
+
+**Endpoint:** `GET /api/v1/pages`
+
+**Access:**
+
+- Super Admin: All pages
+- Admin: Organization pages only
+- Page Owner: Own pages only
+
+**Query Parameters:**
+
+- `organizationId` (optional): Filter by organization
+- `isActive` (optional): Filter by status
+- `page` (optional): Page number
+- `limit` (optional): Items per page
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "pages": [
+      {
+        "id": "page_mno456",
+        "pageId": "123456789012345",
+        "pageName": "My Business Page",
+        "category": "Brand",
+        "fanCount": 15420,
+        "followersCount": 15850,
+        "profilePictureUrl": "https://...",
+        "organizationId": "org_xyz789",
+        "isActive": true,
+        "lastSyncAt": "2025-11-25T09:00:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 15,
+      "totalPages": 1
+    }
+  }
+}
+```
+
+---
+
+### 4.3 Get Page Details
+
+**Endpoint:** `GET /api/v1/pages/:pageId`
+
+**Access:** Users with page access
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "page_mno456",
+    "pageId": "123456789012345",
+    "pageName": "My Business Page",
+    "category": "Brand",
+    "about": "We help businesses grow online",
+    "website": "https://example.com",
+    "phone": "+1-555-0123",
+    "email": "contact@example.com",
+    "fanCount": 15420,
+    "followersCount": 15850,
+    "profilePictureUrl": "https://...",
+    "coverPhotoUrl": "https://...",
+    "organizationId": "org_xyz789",
+    "organization": {
+      "id": "org_xyz789",
+      "name": "Acme Corporation"
+    },
+    "addedBy": {
+      "id": "usr_abc123",
+      "name": "John Admin"
+    },
+    "isActive": true,
+    "lastSyncAt": "2025-11-25T09:00:00Z",
+    "createdAt": "2025-11-24T10:30:00Z"
+  }
+}
+```
+
+---
+
+### 4.4 Sync Page Data from Facebook
+
+**Endpoint:** `POST /api/v1/pages/:pageId/sync`
+
+**Access:** Users with page access
+
+**Description:** Fetch latest page data from Facebook Graph API and update database.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "pageId": "page_mno456",
+    "fanCount": 15450,
+    "followersCount": 15880,
+    "lastSyncAt": "2025-11-25T10:35:00Z"
+  }
+}
+```
+
+---
+
+### 4.5 Update Page
+
+**Endpoint:** `PATCH /api/v1/pages/:pageId`
+
+**Access:** Admin, Super Admin
+
+**Request Body:**
+
+```json
+{
+  "isActive": true,
+  "organizationId": "org_xyz789"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "page_mno456",
+    "isActive": true,
+    "updatedAt": "2025-11-25T10:36:00Z"
+  }
+}
+```
+
+---
+
+### 4.6 Delete/Remove Page
+
+**Endpoint:** `DELETE /api/v1/pages/:pageId`
+
+**Access:** Admin, Super Admin
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Page removed successfully"
+}
+```
+
+---
+
+## Post Management
+
+### 5.1 Create Post (Publish or Draft)
+
+    "cursors": {
+      "before": "MTM1MzI2OTg2NDcy...",
+      "after": "MTM1MzI2OTg2NDcy..."
+    }
+
+}
+}
+
+````
 
 ---
 
@@ -122,7 +605,7 @@ access_token={long-lived-user-token}"
 curl -X GET "https://graph.facebook.com/v24.0/me/accounts?\
 fields=id,name,access_token,category,fan_count,followers_count,picture&\
 access_token={user-access-token}"
-```
+````
 
 **Response Example:**
 
