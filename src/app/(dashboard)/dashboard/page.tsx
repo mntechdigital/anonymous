@@ -7,7 +7,7 @@ const DashboardHome = () => {
           {/* Enhanced welcome section */}
           <div className="px-4 lg:px-6">
             <div className="relative">
-              <h1 className="text-3xl font-bold tracking-tight from-primary to-primary/60 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold">
                 Dashboard Overview
               </h1>
               <p className="text-muted-foreground mt-2">

@@ -29,11 +29,11 @@ export function NavMain({
               <SidebarMenuButton
                 size="lg"
                 tooltip={item.title}
-                className="hover:bg-gradient-to-r hover:from-teal-600/20 hover:to-emerald-600/20 hover:text-teal-100 transition-all duration-300 rounded-lg border border-transparent hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/10"
+                className="hover:bg-linear-to-r hover:from-teal-600/20 hover:to-emerald-600/20 hover:text-teal-100 transition-all duration-300 rounded-lg border border-transparent hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/10"
               >
                 <Link
                   href={item.url}
-                  className="flex items-center gap-3 w-full text-slate-300 group-hover:text-white transition-colors duration-300"
+                  className="flex items-center gap-3 w-full text-slate-800 group-hover:text-slate-800 transition-colors duration-300"
                 >
                   {item.icon && (
                     <item.icon className="w-5 h-5 text-teal-400 group-hover:text-teal-300 transition-colors duration-300" />

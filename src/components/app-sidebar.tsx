@@ -6,7 +6,8 @@ import Link from "next/link";
 import { NavMain } from "./ui/nav-main";
 import { useRouter } from "next/navigation";
 import sidebaritems from "../data/sidebaroption"
-
+import sitelogo from "../../public/sitelogo.jpg"
+import Image from "next/image";
 
 export function AppSidebar({
   variant,
@@ -32,7 +33,9 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/">BNP</Link>
+              <Link href="/" className="text-2xl font-bold">
+                <Image src={sitelogo} alt="Site Logo" width={40} height={40} /> 
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -45,8 +48,8 @@ export function AppSidebar({
 
       <SidebarFooter>
         <div>
-          <p>{data.fullName || "User"}</p>
-          <p>{data.email}</p>
+          <p className="text-sm text-slate-600">{data.fullName || "User Name"}</p>
+          <p className="text-sm text-slate-600">{data.email || "user@gmail.com"}</p>
         </div>
       </SidebarFooter>
     </Sidebar>
