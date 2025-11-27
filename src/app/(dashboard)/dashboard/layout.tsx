@@ -21,19 +21,20 @@ export default async function DashboardLayout({
         } as React.CSSProperties
       }
     >
-    <AppSidebar variant="inset" data={demoSidebarData}/>
-    {/* <AppSidebar variant="inset" data={adminDetails} /> */}
-    <SidebarInset className="relative">
+      {/* <AppSidebar variant="inset" data={demoSidebarData}/> */}
+      <AppSidebar variant="inset" data={{
+        roleFeature: "admin",
+        user: {
+          name: "Reshad",
+          email: "reshad@gmail.com",
+          avatar: "/avatar.png",
+        },
+        mainMenu: ["Dashboard", "Users", "Settings"],
+        footerMenu: [],
+      }} />
+      <SidebarInset>
         <SiteHeader />
-        {/* Enhanced content area with modern backdrop */}
-        <div className="relative min-h-screen from-background via-background to-muted/20">
-          {/* Subtle background pattern */}
-          <div className="absolute inset-0 bg-grid-gray-100/[0.02] dark:bg-grid-white/[0.02]" />
-
-          <div className="relative w-full max-w-[1000px] 2xl:max-w-[1200px]">
-            {children}
-          </div>
-        </div>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );
