@@ -1,32 +1,32 @@
 import {
-  Home,
-  User,
-  Settings,
-  ShoppingCart,
-  BarChart,
+  Calendar,
+  ChartColumnStacked,
   LogOut,
+  Newspaper,
+  Settings,
+  Shapes
 } from "lucide-react"; // or your icon library
 
 const sidebarMenuItems = [
   {
-    title: "Dashboard",
+    title: "Overview",
     url: "/dashboard",
-    icon: Home,
+    icon: Shapes,
   },
   {
-    title: "Profile",
-    url: "/profile",
-    icon: User,
+    title: "Facebook Pages",
+    url: "/dashboard/facebook_pages",
+    icon: Newspaper,
   },
   {
-    title: "Orders",
-    url: "/orders",
-    icon: ShoppingCart,
+    title: "Posts & Scheduling",
+    url: "/dashboard/posts_schedule",
+    icon: Calendar,
   },
   {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart,
+    title: "Insights",
+    url: "/dashboard/analytics",
+    icon: ChartColumnStacked,
   },
   {
     title: "Settings",
