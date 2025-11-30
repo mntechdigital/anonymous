@@ -18,7 +18,7 @@ const PostsScheduleHeader = () => {
             </div>
             <div className='col-span-1'>
                 <Select>
-                    <SelectTrigger className="w-[250px] px-6 py-6 border rounded-full">
+                    <SelectTrigger className="w-[200px] px-6 py-6 border rounded-full">
                         <SelectValue placeholder="Select Page" />
                     </SelectTrigger>
                     <SelectContent>
