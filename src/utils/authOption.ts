@@ -1,3 +1,4 @@
+import { pageUserLogin } from "@/service/pageUser";
 import { NextAuthOptions } from "next-auth";
 import Facebook from "next-auth/providers/facebook";
 
@@ -17,9 +18,20 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log("User:", user);
-      console.log("Account:", account);
-      console.log("Profile:", profile);
+      const pageUserData = {
+        ...user,
+        providerAccountId:account?.providerAccountId,
+        access_token: account?.access_token,
+        expires_at:account?.expires_at
+      }
+      if (pageUserData) {
+        try {
+          const res = await pageUserLogin(pageUserData);
+         console.log(res);
+        } catch (error) {
+          console.error("Login failed:", error);  
+        }
+      }
 
       return true;
     },
