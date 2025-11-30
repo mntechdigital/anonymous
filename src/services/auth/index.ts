@@ -55,14 +55,8 @@ export const login = async (data: FieldValues) => {
     const result = await response.json();
 
     if (result.statusCode === 200) {
-      const cookie = await cookies();
-
-      cookie.set("accessToken", result.data.accessToken, {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      });
-      cookie.set("refreshToken", result.data.refreshToken, {
-        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      });
+      localStorage.setItem("accessToken", result.data.accessToken);
+      localStorage.setItem("refreshToken", result.data.refreshToken);
     }
 
     return result;
@@ -71,6 +65,7 @@ export const login = async (data: FieldValues) => {
     throw new Error("Login failed. Please try again.");
   }
 };
+
 
 export const logout = async () => {
   try {
