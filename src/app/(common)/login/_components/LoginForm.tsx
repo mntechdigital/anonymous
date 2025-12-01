@@ -33,11 +33,8 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setErrorMessage("");
-
     const res = await login(data);
-    console.log("LOGIN RESPONSE:", res);
     if (res.statusCode === 200) {
-      console.log("force to push dashboard")
       router.push("/dashboard");
     } else {
       setErrorMessage(res.message || "Login failed. Please try again.");
