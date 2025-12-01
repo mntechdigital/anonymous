@@ -73,7 +73,7 @@ export default function RolePermissionModal({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-[640px] bg-white rounded-2xl shadow-2xl overflow-hidden"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -83,7 +83,7 @@ export default function RolePermissionModal({
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+                className="absolute top-4 right-4 text-gray-600 hover:text-gray-600 transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -113,20 +113,20 @@ export default function RolePermissionModal({
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(submit)}>
                     {/* Permissions Grid */}
-                    <div className="grid grid-cols-3 gap-x-6 gap-y-4 mb-6">
+                    <div className="grid grid-cols-3 gap-x-6 gap-y-6 mb-6">
                       <FormField
                         name="overview"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Overview
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
@@ -137,15 +137,15 @@ export default function RolePermissionModal({
                         name="facebookPages"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Facebook Pages
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
@@ -156,15 +156,15 @@ export default function RolePermissionModal({
                         name="postScheduling"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Post Scheduling
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
@@ -175,15 +175,15 @@ export default function RolePermissionModal({
                         name="insights"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Insights
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
@@ -194,15 +194,15 @@ export default function RolePermissionModal({
                         name="pollFeedback"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Poll & Feedback
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
@@ -213,15 +213,15 @@ export default function RolePermissionModal({
                         name="setting"
                         control={form.control}
                         render={({ field }) => (
-                          <FormItem className="flex flex-col items-start gap-2">
-                            <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormItem className="flex flex-col items-center gap-2">
+                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
                               Setting
                             </FormLabel>
                             <FormControl>
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500"
+                                className="data-[state=checked]:bg-blue-500 scale-150"
                               />
                             </FormControl>
                           </FormItem>
