@@ -79,7 +79,7 @@ const AppSidebar = () => {
   return (
     <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white overflow-visible">
       {/* Logo Section with Toggle Button */}
-      <SidebarHeader className="pt-4 pb-6 bg-white relative overflow-visible">
+      <SidebarHeader className={`pt-4 ${isCollapsed ? "pb-1" : "pb-6"} bg-white relative overflow-visible`}>
         <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between px-2"}`}>
           <Link href="/dashboard" className="flex items-center">
             {isCollapsed ? (
@@ -100,14 +100,12 @@ const AppSidebar = () => {
           )}
         </div>
         {isCollapsed && !isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
             onClick={toggleSidebar}
-            className="absolute top-1/2 -translate-y-1/2 -right-6 cursor-pointer h-8 w-8 rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-700 hover:bg-gray-50 z-50"
+            className="cursor-pointer mx-auto my-2 py-2 px-2 ml-1 hover:bg-[#E7F2FF] hover:text-[#297AFF] rounded-sm transition-colors"
           >
-            <ChevronsLeft className="h-4 w-4 rotate-180" />
-          </Button>
+            <ChevronsLeft className="h-4 w-4 rotate-180 " />
+          </button>
         )}
       </SidebarHeader>
 
