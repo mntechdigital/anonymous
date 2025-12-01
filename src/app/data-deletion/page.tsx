@@ -20,7 +20,7 @@ export default function Page() {
         <li>
           Contact us directly by email and we will process your request
           manually. Include your Facebook user ID or the email tied to your
-          Facebook account.
+          Facebook account
         </li>
       </ol>
       <div>

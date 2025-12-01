@@ -1,10 +1,10 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
-
-export default function Page() {
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code");
+export default function Page({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const raw = searchParams?.code;
+  const code = Array.isArray(raw) ? raw[0] : raw;
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 space-y-6">
