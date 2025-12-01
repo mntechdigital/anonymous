@@ -1,25 +1,32 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Search, Bell, ChevronDown, LogOut, User } from "lucide-react";
+import { Search, Bell, ChevronDown, LogOut, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-
+import { useSidebar } from "@/components/ui/sidebar";
 
 export function SiteHeader() {
-  return (
-    <header className="sticky top-0 z-10 flex h-[var(--header-height)] items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex w-full items-center gap-4 px-4 lg:px-6">
-        {/* Left Section */}
-        <SidebarTrigger className="hover:bg-accent/50 transition-colors" />
+  const { toggleSidebar, isMobile } = useSidebar();
 
-        <Separator orientation="vertical" className="h-5" />
+  return (
+    <header className="sticky top-0 flex h-(--header-height) items-center border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="flex w-full items-center gap-4 px-4 lg:px-6">
+        {/* Mobile Menu Button */}
+        {isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
 
         {/* Right Section */}
-        <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-auto">
           {/* Search */}
           <div className="relative hidden md:block w-full max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

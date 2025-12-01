@@ -1,107 +1,228 @@
 "use client";
-import React, { useState } from 'react';
-import { LayoutDashboard, FileText, Calendar, BarChart3, Scale, Settings, LogOut } from 'lucide-react';
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Shapes,
+  Newspaper,
+  Calendar,
+  ChartColumnStacked,
+  Scale,
+  Settings,
+  LogOut,
+  Landmark,
+  ChevronsLeft,
+} from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarSeparator,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import logoImage from "@/app/assets/LoremIpsum.png";
+import logoIcon from "@/app/assets/Group 1000002752.svg";
 
 const AppSidebar = () => {
-  const [activeItem, setActiveItem] = useState('Overview');
+  const pathname = usePathname();
+  const { state, isMobile, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
 
-  const menuItems = [
-    { icon: LayoutDashboard, label: 'Overview', active: true },
-    { icon: FileText, label: 'Facebook Pages', active: false },
-    { icon: Calendar, label: 'Post & Scheduling', active: false },
-    { icon: BarChart3, label: 'Insights', active: false },
+  const mainMenuItems = [
+    { icon: Shapes, label: "Overview", href: "/dashboard" },
+    {
+      icon: Newspaper,
+      label: "Facebook Pages",
+      href: "/dashboard/facebook_pages",
+    },
+    {
+      icon: Calendar,
+      label: "Post & Scheduling",
+      href: "/dashboard/posts_schedule",
+    },
+    {
+      icon: ChartColumnStacked,
+      label: "Insights",
+      href: "/dashboard/analytics",
+    },
+    { icon: Scale, label: "Poll", href: "/dashboard/poll" },
   ];
 
   const bottomMenuItems = [
-    { icon: Scale, label: 'Poll' },
-    { icon: Settings, label: 'Setting' },
+    {
+      icon: Landmark,
+      label: "Administration",
+      href: "/dashboard/administration",
+    },
+    { icon: Settings, label: "Setting", href: "/dashboard/settings" },
   ];
 
   const userInfo = {
-    name: 'W. Shakespeare',
-    email: 'shakespeare@gmail.com',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Shakespeare'
+    name: "W. Shakespeare",
+    email: "shakespeare@gmail.com",
+    avatar: "https://github.com/shadcn.png",
+  };
+
+  const isActive = (href: string) => {
+    if (href === "/dashboard") {
+      return pathname === "/dashboard";
+    }
+    return pathname.startsWith(href);
   };
 
   return (
-    <div className="w-72 h-screen bg-white border-r border-gray-200 flex flex-col">
-      {/* Logo Section */}
-      <div className="p-6 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 8L8 12C8 14 10 16 12 16L16 16" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" fill="none"/>
-            <path d="M12 12L20 12C22 12 24 14 24 16L24 20" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" fill="none"/>
-            <path d="M16 16L24 16C26 16 28 18 28 20L28 24" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" fill="none"/>
-            <path d="M6 6L10 10L6 14" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-          </svg>
-          <div>
-            <span className="text-2xl font-bold text-blue-600">Logo</span>
-            <span className="text-2xl font-bold text-gray-800">ipsum</span>
-          </div>
+    <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white overflow-visible">
+      {/* Logo Section with Toggle Button */}
+      <SidebarHeader className="pt-4 pb-6 bg-white relative overflow-visible">
+        <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between px-2"}`}>
+          <Link href="/dashboard" className="flex items-center">
+            {isCollapsed ? (
+              <Image src={logoIcon} alt="logo icon" width={40} height={40} className="w-8 h-8" />
+            ) : (
+              <Image src={logoImage} alt="logo image" width={180} height={40} className="h-8 w-auto" />
+            )}
+          </Link>
+          {!isCollapsed && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="h-8 w-8 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+            >
+              <ChevronsLeft className="h-5 w-5" />
+            </Button>
+          )}
         </div>
-      </div>
+        {isCollapsed && !isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="absolute top-1/2 -translate-y-1/2 -right-4 h-8 w-8 rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-700 hover:bg-gray-50 z-50"
+          >
+            <ChevronsLeft className="h-4 w-4 rotate-180" />
+          </Button>
+        )}
+      </SidebarHeader>
 
       {/* Main Menu Items */}
-      <div className="flex-1 px-4 py-6">
-        <nav className="space-y-1">
-          {menuItems.map((item) => {
+      <SidebarContent className="px-3 overflow-hidden bg-white">
+        <SidebarMenu className="space-y-1">
+          {mainMenuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeItem === item.label;
+            const active = isActive(item.href);
             return (
-              <button
-                key={item.label}
-                onClick={() => setActiveItem(item.label)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
-                <span className="font-medium">{item.label}</span>
-              </button>
+              <SidebarMenuItem key={item.label}>
+                <SidebarMenuButton
+                  asChild
+                  className={`${
+                    active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
+                  } rounded hover:bg-slate-50/70`}
+                >
+                  <Link href={item.href}>
+                    <Icon
+                      className={`${
+                        active
+                          ? "text-[#297AFF]"
+                          : "text-[#888888] group-hover/item:text-[#297AFF]"
+                      }`}
+                    />
+                    <span
+                      className={`font-medium ${
+                        active
+                          ? "text-[#297AFF]"
+                          : "text-[#888888] group-hover/item:text-[#297AFF]"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             );
           })}
-        </nav>
+        </SidebarMenu>
 
-        {/* Bottom Menu Items */}
-        <nav className="space-y-1 mt-auto pt-96">
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Bottom Menu Items (Poll & Settings) */}
+        <SidebarMenu className="space-y-1 mt-auto bg-white">
           {bottomMenuItems.map((item) => {
             const Icon = item.icon;
+            const active = isActive(item.href);
             return (
-              <button
-                key={item.label}
-                onClick={() => setActiveItem(item.label)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-all duration-200"
-              >
-                <Icon className="w-5 h-5 text-gray-400" />
-                <span className="font-medium">{item.label}</span>
-              </button>
+              <SidebarMenuItem key={item.label}>
+                <SidebarMenuButton
+                  asChild
+                  className={`${
+                    active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
+                  } rounded hover:bg-slate-50/70`}
+                >
+                  <Link href={item.href}>
+                    <Icon
+                      className={`${
+                        active
+                          ? "text-[#297AFF]"
+                          : "text-[#888888] group-hover/item:text-[#297AFF]"
+                      }`}
+                    />
+                    <span
+                      className={`font-medium ${
+                        active
+                          ? "text-[#297AFF]"
+                          : "text-[#888888] group-hover/item:text-[#297AFF]"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             );
           })}
-        </nav>
-      </div>
+        </SidebarMenu>
+      </SidebarContent>
 
       {/* User Profile Section */}
-      <div className="p-4 border-t border-gray-100">
-        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group">
-          <img
-            src={userInfo.avatar}
-            alt={userInfo.name}
-            className="w-12 h-12 rounded-full"
-          />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">
-              {userInfo.name}
-            </p>
-            <p className="text-xs text-gray-500 truncate">
-              {userInfo.email}
-            </p>
-          </div>
-          <LogOut className="w-5 h-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-        </div>
-      </div>
-    </div>
+      <SidebarFooter className="bg-white p-2">
+        <SidebarSeparator className="mb-2" />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="hover:bg-gray-50 data-[state=open]:bg-gray-50"
+              tooltip={userInfo.name}
+            >
+              <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-full ring-2 ring-blue-100 overflow-hidden">
+                <Image
+                  src={userInfo.avatar}
+                  alt={userInfo.name}
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold text-gray-900">
+                  {userInfo.name}
+                </span>
+                <span className="truncate text-xs text-gray-500">
+                  {userInfo.email}
+                </span>
+              </div>
+              <LogOut className="ml-auto size-4 shrink-0 text-gray-400" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   );
 };
 
