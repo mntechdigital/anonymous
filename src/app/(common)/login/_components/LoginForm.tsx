@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/services/auth";
+import { useRouter } from "next/navigation";
 
 interface LoginFormData {
   email: string;
@@ -14,6 +15,8 @@ interface LoginFormData {
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const {
     control,
@@ -29,25 +32,39 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
+    setErrorMessage("");
 
     const res = await login(data);
-    console.log(res);
-
+    console.log("LOGIN RESPONSE:", res);
+    if (res.statusCode === 200) {
+      console.log("force to push dashboard")
+      router.push("/dashboard");
+    } else {
+      setErrorMessage(res.message || "Login failed. Please try again.");
+    }
     setIsLoading(false);
   };
 
   const handleCancel = () => {
     reset();
+    setErrorMessage("");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Log In</h1>
           <p className="text-gray-600">Facebook Automation System</p>
         </div>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-600 text-sm">{errorMessage}</p>
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

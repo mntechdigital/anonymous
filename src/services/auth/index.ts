@@ -1,7 +1,7 @@
 "use server";
 
 import { apiRequest } from "@/lib/apiRequest";
-import { TCustomJwtPayload } from "@/types/auth.types";
+import { LoginResponse, TCustomJwtPayload } from "@/types/auth.types";
 import { jwtDecode } from "jwt-decode";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -39,7 +39,9 @@ export const register = async (data: FormData) => {
   return await response;
 };
 
-export const login = async (data: FieldValues) => {
+
+
+export const login = async (data: FieldValues): Promise<LoginResponse> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
@@ -55,8 +57,14 @@ export const login = async (data: FieldValues) => {
     const result = await response.json();
 
     if (result.statusCode === 200) {
-      localStorage.setItem("accessToken", result.data.accessToken);
-      localStorage.setItem("refreshToken", result.data.refreshToken);
+      const cookie = await cookies();
+
+      cookie.set("accessToken", result.token.accessToken, {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      cookie.set("refreshToken", result.token.refreshToken, {
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      });
     }
 
     return result;
@@ -65,6 +73,19 @@ export const login = async (data: FieldValues) => {
     throw new Error("Login failed. Please try again.");
   }
 };
+
+// export const login = async (data: FieldValues) => {
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(data),
+//     credentials: "include",
+//   });
+
+//   const result = await response.json();
+//   return result;
+// };
+
 
 
 export const logout = async () => {
