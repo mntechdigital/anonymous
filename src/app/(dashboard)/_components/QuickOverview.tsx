@@ -45,7 +45,7 @@ export default function QuickOverview() {
   ]
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <main className="min-h-screen bg-white p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon

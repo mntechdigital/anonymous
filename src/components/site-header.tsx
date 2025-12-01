@@ -58,6 +58,7 @@ export function SiteHeader() {
                   <AvatarImage
                     src="https://github.com/shadcn.png"
                     alt="Admin"
+                    className="rounded-full"
                   />
                   <AvatarFallback>AD</AvatarFallback>
                 </Avatar>
