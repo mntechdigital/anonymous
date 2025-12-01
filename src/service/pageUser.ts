@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use server";
 
 export const pageUserLogin = async (
   data: any,

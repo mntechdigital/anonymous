@@ -18,18 +18,19 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log(user, account, profile);
       const pageUserData = {
         ...user,
-        providerAccountId:account?.providerAccountId,
+        providerAccountId: account?.providerAccountId,
         access_token: account?.access_token,
-        expires_at:account?.expires_at
-      }
+        expires_at: account?.expires_at,
+      };
       if (pageUserData) {
         try {
           const res = await pageUserLogin(pageUserData);
-         console.log(res);
+          console.log(res);
         } catch (error) {
-          console.error("Login failed:", error);  
+          console.error("Login failed:", error);
         }
       }
 
