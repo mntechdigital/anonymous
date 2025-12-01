@@ -2,7 +2,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
-// import { getAdminDetails } from "@/services/auth";
 
 export default async function DashboardLayout({
   children,
@@ -19,8 +18,8 @@ export default async function DashboardLayout({
       }
     >
       <AppSidebar />
-      <SidebarInset className="flex flex-col overflow-hidden">
-        <div className="shrink-0">
+      <SidebarInset className="flex flex-col h-screen overflow-hidden">
+        <div className="shrink-0 sticky top-0 z-10">
           <SiteHeader />
         </div>
         <main className="flex-1 overflow-auto">
