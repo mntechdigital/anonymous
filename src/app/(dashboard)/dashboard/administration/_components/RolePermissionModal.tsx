@@ -4,25 +4,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { X } from "lucide-react";
 import teamIcon from "../../../../assets/role.svg";
 import Image from "next/image";
 
 export type RolePermissionValues = {
-  overview: boolean;
-  facebookPages: boolean;
-  postScheduling: boolean;
-  insights: boolean;
-  pollFeedback: boolean;
-  setting: boolean;
+  features: number[];
 };
 
 interface Props {
@@ -38,18 +27,22 @@ export default function RolePermissionModal({
 }: Props) {
   const form = useForm<RolePermissionValues>({
     defaultValues: {
-      overview: false,
-      facebookPages: false,
-      postScheduling: false,
-      insights: false,
-      pollFeedback: false,
-      setting: false,
+      features: [],
     },
   });
 
   const submit = (values: RolePermissionValues) => {
+    console.log('Selected features:', values.features);
     onConfirm(values);
     onOpenChange(false);
+  };
+
+  const toggleFeature = (index: number) => {
+    const currentFeatures = form.getValues('features');
+    const newFeatures = currentFeatures.includes(index)
+      ? currentFeatures.filter((f) => f !== index)
+      : [...currentFeatures, index];
+    form.setValue('features', newFeatures);
   };
 
   return (
@@ -114,119 +107,71 @@ export default function RolePermissionModal({
                   <form onSubmit={form.handleSubmit(submit)}>
                     {/* Permissions Grid */}
                     <div className="grid grid-cols-3 gap-x-6 gap-y-6 mb-6">
-                      <FormField
-                        name="overview"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Overview
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Overview
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(0)}
+                          onCheckedChange={() => toggleFeature(0)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
 
-                      <FormField
-                        name="facebookPages"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Facebook Pages
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Facebook Pages
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(1)}
+                          onCheckedChange={() => toggleFeature(1)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
 
-                      <FormField
-                        name="postScheduling"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Post Scheduling
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Post & Schedule
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(2)}
+                          onCheckedChange={() => toggleFeature(2)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
 
-                      <FormField
-                        name="insights"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Insights
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Insights
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(3)}
+                          onCheckedChange={() => toggleFeature(3)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
 
-                      <FormField
-                        name="pollFeedback"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Poll & Feedback
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Support
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(4)}
+                          onCheckedChange={() => toggleFeature(4)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
 
-                      <FormField
-                        name="setting"
-                        control={form.control}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col items-center gap-2">
-                            <FormLabel className="text-xs font-medium text-gray-700 mb-1.5">
-                              Setting
-                            </FormLabel>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="data-[state=checked]:bg-blue-500 scale-150"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="text-xs font-medium text-gray-700 mb-1.5">
+                          Settings
+                        </div>
+                        <Switch
+                          checked={form.watch('features').includes(5)}
+                          onCheckedChange={() => toggleFeature(5)}
+                          className="data-[state=checked]:bg-blue-500 scale-150"
+                        />
+                      </div>
                     </div>
 
                     {/* Actions */}

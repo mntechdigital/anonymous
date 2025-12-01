@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
 import teamIcon from "../../../../assets/fluent-color_people-team-24.svg";
 import Image from "next/image";
 
@@ -17,6 +18,7 @@ const userSchema = z.object({
   password: z.string().min(6, "Password too short"),
   confirmPassword: z.string().min(6, "Confirm password"),
   roleName: z.string().min(1, "Role name required"),
+  features: z.array(z.number()),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -31,6 +33,9 @@ interface Props {
 }
 
 export default function CreateUserModal({ open, onOpenChange, onNext }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm<CreateUserValues>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -39,10 +44,12 @@ export default function CreateUserModal({ open, onOpenChange, onNext }: Props) {
       password: "",
       confirmPassword: "",
       roleName: "",
+      features: [],
     },
   });
 
   const submit = (values: CreateUserValues) => {
+    console.log('Create user with features:', values.features);
     onNext(values);
     onOpenChange(false);
   };
@@ -157,12 +164,25 @@ export default function CreateUserModal({ open, onOpenChange, onNext }: Props) {
                               Password<span className="text-red-500">*</span>
                             </FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                type="password"
-                                placeholder="********"
-                                className="border-gray-200 h-11 focus-visible:ring-1"
-                              />
+                              <div className="relative">
+                                <Input
+                                  {...field}
+                                  type={showPassword ? "text" : "password"}
+                                  placeholder="********"
+                                  className="border-gray-200 h-11 focus-visible:ring-1 pr-10"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                  {showPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                  ) : (
+                                    <Eye className="w-5 h-5" />
+                                  )}
+                                </button>
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
@@ -177,12 +197,25 @@ export default function CreateUserModal({ open, onOpenChange, onNext }: Props) {
                               Confirm Password<span className="text-red-500">*</span>
                             </FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                type="password"
-                                placeholder="********"
-                                className="border-gray-200 h-11 focus-visible:ring-1"
-                              />
+                              <div className="relative">
+                                <Input
+                                  {...field}
+                                  type={showConfirmPassword ? "text" : "password"}
+                                  placeholder="********"
+                                  className="border-gray-200 h-11 focus-visible:ring-1 pr-10"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                  {showConfirmPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                  ) : (
+                                    <Eye className="w-5 h-5" />
+                                  )}
+                                </button>
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}

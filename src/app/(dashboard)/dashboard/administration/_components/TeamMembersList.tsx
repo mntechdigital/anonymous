@@ -46,6 +46,7 @@ const TeamMembersList = ({ title, description, members }: TeamMembersListProps) 
       password: "",
       confirmPassword: "",
       roleName: "",
+      features: [],
     });
     setRoleOpen(true);
   }, []);
@@ -61,7 +62,16 @@ const TeamMembersList = ({ title, description, members }: TeamMembersListProps) 
   const handleRoleConfirm = (permissions: RolePermissionValues) => {
     // Final confirm: log combined data
     console.log("New user:", pendingUser);
-    console.log("Permissions:", permissions);
+    console.log("Permissions features array:", permissions.features);
+    
+    // Combine the user data with the selected features
+    const finalPayload = {
+      ...pendingUser,
+      features: permissions.features, // This will be an array like [0, 1, 2] matching backend indices
+    };
+    
+    console.log("Final payload to send to backend:", finalPayload);
+    
     setRoleOpen(false);
     setPendingUser(null);
   };
