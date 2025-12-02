@@ -1,11 +1,5 @@
-import DashboardLoadingSkeleton from '@/components/shared/skleton/DashboardLoading';
-
 const loading = () => {
-    return (
-        <div>
-            <DashboardLoadingSkeleton/>
-        </div>
-    );
+  return <div>Loading...</div>;
 };
 
 export default loading;
