@@ -3,11 +3,200 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Enable smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Modern animations */
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+  }
+
+  /* Background grid pattern */
+  .bg-grid-gray-100 {
+    background-image: linear-gradient(
+        rgba(156, 163, 175, 0.1) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(156, 163, 175, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .bg-grid-white {
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Editor Styles */
+.tiptap {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+  h1 {
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid #ddd;
+  }
+
+  code {
+    background-color: rgb(241, 241, 241);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: #0d0d0d;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  hr {
+    margin: 1rem 0;
+    border-top: 2px solid #ddd;
+  }
+}
+
+.ProseMirror {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  min-height: 200px;
+  outline: none;
+
+  &:focus {
+    border-color: #a5a5a5;
+  }
+
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  &.resize-cursor {
+    cursor: row-resize;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), "Inter", sans-serif;
+  --font-nunito: var(--font-nunito-sans), "Nunito Sans", sans-serif;
+  --font-mono: var(--font-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -43,6 +232,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@theme {
+  --color-brand: #007bff;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -76,6 +269,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+}
+
+body {
+  font-family: var(--font-inter), sans-serif;
 }
 
 .dark {
@@ -119,4 +316,209 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Add these styles to your global CSS file */
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes toast-glow {
+  0%,
+  100% {
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4),
+      0 4px 6px -2px rgba(16, 185, 129, 0.05);
+  }
+  50% {
+    box-shadow: 0 15px 35px -5px rgba(16, 185, 129, 0.6),
+      0 8px 15px -2px rgba(16, 185, 129, 0.15);
+  }
+}
+
+@keyframes toast-error-glow {
+  0%,
+  100% {
+    box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4),
+      0 4px 6px -2px rgba(239, 68, 68, 0.05);
+  }
+  50% {
+    box-shadow: 0 15px 35px -5px rgba(239, 68, 68, 0.6),
+      0 8px 15px -2px rgba(239, 68, 68, 0.15);
+  }
+}
+
+/* Toast container animations */
+.toast-success {
+  animation: toast-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    toast-bounce 0.6s ease-out 0.2s, toast-glow 2s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-error {
+  animation: toast-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    toast-bounce 0.6s ease-out 0.2s, toast-error-glow 2s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover effects */
+.toast-success:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.5),
+    0 8px 20px -4px rgba(16, 185, 129, 0.2);
+}
+
+.toast-error:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.5),
+    0 8px 20px -4px rgba(239, 68, 68, 0.2);
+}
+
+/* Exit animation */
+[data-sonner-toast][data-removed="true"] {
+  animation: toast-slide-out 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Icon animations */
+.toast-success [data-icon] {
+  animation: toast-bounce 0.8s ease-out 0.4s;
+}
+
+.toast-error [data-icon] {
+  animation: toast-bounce 0.8s ease-out 0.4s;
+}
+
+/* Responsive container for all major breakpoints: mobile, tablet, laptop, desktop, 4K */
+.container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/* Small tablets (≥ 640px) */
+@media (min-width: 640px) {
+  .container {
+    max-width: 600px;
+  }
+}
+
+/* Tablets (≥ 768px) */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+/* Mini laptops (≥ 1024px) */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+/* Laptops (≥ 1280px) */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Desktops (≥ 1536px) */
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+/* Large desktops / 2K (≥ 1920px) */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1720px;
+  }
+}
+
+/* 4K screens (≥ 2560px) */
+@media (min-width: 2560px) {
+  .container {
+    max-width: 2200px;
+  }
+}
+
+@theme inline {
+  --animate-scroll: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
+  --animate-scroll-paused: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite paused;
+
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+}
+
+/* Push on hover effect for scrolling elements */
+.scroll-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-content {
+  animation: var(--animate-scroll);
+  display: flex;
+  gap: 1rem;
+}
+
+.scroll-container:hover .scroll-content {
+  animation-play-state: paused;
+}
+
+.scroll-item {
+  transition: transform 0.3s ease;
+}
+
+.scroll-container:hover .scroll-item:hover {
+  transform: translateY(-8px) scale(1.05);
+  z-index: 10;
 }

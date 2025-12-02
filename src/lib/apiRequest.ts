@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { getAccessToken } from "./getAccessToken";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
+const API_BASE_URL = (process.env.NEXT_PUBLIC_BACKEND_URL) as string;
 
 // Detect runtime environment
 const isServer = typeof window === "undefined";
@@ -40,18 +40,10 @@ export const apiRequest = async (
     }
   }
 
-  const fullUrl = `${API_BASE_URL}/${endpoint}`;
-  console.log("📡 API Request:", {
-    url: fullUrl,
-    method: options.method || "GET",
-  });
-
-  const response = await fetch(fullUrl, {
+  const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
     ...options,
     headers,
   });
-
-  console.log("📡 API Response Status:", response.status);
 
   // Handle token expiration only if auth was required
   if (response.status === 401 && options.authRequired) {
@@ -63,7 +55,8 @@ export const apiRequest = async (
       }
     } catch (error) {
       console.error("Failed to refresh token:", error);
-      throw new Error("Unauthorized access. Please log in again.");
+      // If we can't refresh the token, return the original response
+      return response.json();
     }
 
     if (typeof window !== "undefined") {
@@ -71,15 +64,6 @@ export const apiRequest = async (
     } else {
       throw new Error("Unauthorized access. Please log in again.");
     }
-  }
-
-  // Check if response is ok before parsing JSON
-  if (!response.ok) {
-    const contentType = response.headers.get("content-type");
-    const errorData = contentType?.includes("application/json")
-      ? await response.json()
-      : { message: await response.text() };
-    throw new Error(errorData.message || `API Error: ${response.status}`);
   }
 
   return response.json();
