@@ -1,4 +1,5 @@
-import { JwtPayload } from 'jwt-decode';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { JwtPayload } from "jwt-decode";
 
 export interface TCustomJwtPayload extends JwtPayload {
   id?: string;
@@ -40,3 +41,20 @@ export type TAdminDetails = {
   updatedAt?: Date;
   role: TRole;
 };
+
+export interface LoginResponse {
+  token?: {                  // ✅ make optional
+    accessToken: string;
+    refreshToken: string;
+  };
+  statusCode: number;
+  message: string;
+  data?: {
+    id: string;
+    email: string;
+    role: string;
+    features: any[];
+  };
+  errorSources?: any[];
+}
+

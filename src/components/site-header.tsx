@@ -6,9 +6,41 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useMemo } from "react";
+import { jwtDecode } from "jwt-decode";
+import { TCustomJwtPayload } from "@/types/auth.types";
+import getCookie from "@/utils/getCookie";
+
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
+
+  // Use useMemo to decode token only once
+  const user = useMemo(() => {
+    const token = getCookie("accessToken");
+    
+    if (!token) return null;
+    
+    try {
+      return jwtDecode<TCustomJwtPayload>(token);
+    } catch (err) {
+      console.error("Failed to decode token", err);
+      return null;
+    }
+  }, []);
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (!user?.email) return "U";
+    return user.email.substring(0, 2).toUpperCase();
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
+  };
 
   return (
     <header className="sticky top-0 flex h-(--header-height) items-center border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -58,14 +90,14 @@ export function SiteHeader() {
                     alt="Admin"
                     className="rounded-full"
                   />
-                  <AvatarFallback>AD</AvatarFallback>
+                  <AvatarFallback>{getUserInitials()}</AvatarFallback>
                 </Avatar>
                 <div className="hidden text-left md:block">
                   <p className="text-sm font-medium leading-none">
-                    Admin User
+                    {user?.email ?? "Guest"}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Super Admin
+                    {user?.role ?? "User"}
                   </p>
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -78,7 +110,10 @@ export function SiteHeader() {
                 Profile
               </DropdownMenuItem>
 
-              <DropdownMenuItem className="text-red-600 focus:text-red-600">
+              <DropdownMenuItem 
+                className="text-red-600 focus:text-red-600"
+                onClick={handleLogout}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>
