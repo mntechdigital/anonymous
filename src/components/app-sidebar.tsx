@@ -28,6 +28,9 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import logoImage from "@/app/assets/LoremIpsum.png";
 import logoIcon from "@/app/assets/Group 1000002752.svg";
+import { AvatarFallback, AvatarImage } from "./ui/avatar";
+import { getInitials } from "@/utils/getIntials";
+import { Avatar } from "@radix-ui/react-avatar";
 
 const AppSidebar = () => {
   const pathname = usePathname();
@@ -102,7 +105,7 @@ const AppSidebar = () => {
         {isCollapsed && !isMobile && (
           <button
             onClick={toggleSidebar}
-            className="cursor-pointer mx-auto my-2 py-2 px-2 ml-1 hover:bg-[#E7F2FF] hover:text-[#297AFF] rounded-sm transition-colors"
+            className="cursor-pointer mx-auto my-2 py-2 px-2 hover:bg-[#E7F2FF] hover:text-[#297AFF] rounded-sm transition-colors"
           >
             <ChevronsLeft className="h-4 w-4 rotate-180 " />
           </button>
@@ -110,7 +113,7 @@ const AppSidebar = () => {
       </SidebarHeader>
 
       {/* Main Menu Items */}
-      <SidebarContent className="px-3 overflow-hidden bg-white">
+      <SidebarContent className="px-2 overflow-hidden bg-white">
         <SidebarMenu className="space-y-1">
           {mainMenuItems.map((item) => {
             const Icon = item.icon;
@@ -119,24 +122,21 @@ const AppSidebar = () => {
               <SidebarMenuItem key={item.label}>
                 <SidebarMenuButton
                   asChild
-                  className={`${
-                    active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
-                  } rounded hover:bg-slate-50/70`}
+                  className={`${active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
+                    } rounded hover:bg-slate-50/70`}
                 >
                   <Link href={item.href}>
                     <Icon
-                      className={`${
-                        active
-                          ? "text-[#297AFF]"
-                          : "text-[#888888] group-hover/item:text-[#297AFF]"
-                      }`}
+                      className={`${active
+                        ? "text-[#297AFF]"
+                        : "text-[#888888] group-hover/item:text-[#297AFF]"
+                        }`}
                     />
                     <span
-                      className={`font-medium ${
-                        active
-                          ? "text-[#297AFF]"
-                          : "text-[#888888] group-hover/item:text-[#297AFF]"
-                      }`}
+                      className={`font-medium ${active
+                        ? "text-[#297AFF]"
+                        : "text-[#888888] group-hover/item:text-[#297AFF]"
+                        }`}
                     >
                       {item.label}
                     </span>
@@ -151,7 +151,7 @@ const AppSidebar = () => {
         <div className="flex-1" />
 
         {/* Bottom Menu Items (Poll & Settings) */}
-        <SidebarMenu className="space-y-1 mt-auto bg-white">
+        <SidebarMenu className="space-y-1 mt-auto bg-white mb-2">
           {bottomMenuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -159,24 +159,21 @@ const AppSidebar = () => {
               <SidebarMenuItem key={item.label}>
                 <SidebarMenuButton
                   asChild
-                  className={`${
-                    active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
-                  } rounded hover:bg-slate-50/70`}
+                  className={`${active ? "bg-[#E7F2FF] hover:bg-[#E7F2FF]" : ""
+                    } rounded hover:bg-slate-50/70`}
                 >
                   <Link href={item.href}>
                     <Icon
-                      className={`${
-                        active
-                          ? "text-[#297AFF]"
-                          : "text-[#888888] group-hover/item:text-[#297AFF]"
-                      }`}
+                      className={`${active
+                        ? "text-[#297AFF]"
+                        : "text-[#888888] group-hover/item:text-[#297AFF]"
+                        }`}
                     />
                     <span
-                      className={`font-medium ${
-                        active
-                          ? "text-[#297AFF]"
-                          : "text-[#888888] group-hover/item:text-[#297AFF]"
-                      }`}
+                      className={`font-medium ${active
+                        ? "text-[#297AFF]"
+                        : "text-[#888888] group-hover/item:text-[#297AFF]"
+                        }`}
                     >
                       {item.label}
                     </span>
@@ -189,23 +186,26 @@ const AppSidebar = () => {
       </SidebarContent>
 
       {/* User Profile Section */}
+      <SidebarSeparator className="mx-0" />
       <SidebarFooter className="bg-white p-2">
-        <SidebarSeparator className="mb-2" />
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
               className="hover:bg-gray-50 data-[state=open]:bg-gray-50"
-              tooltip={userInfo.name}
+              tooltip={userInfo?.name}
             >
               <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-full ring-2 ring-blue-100 overflow-hidden">
-                <Image
-                  src={userInfo.avatar}
-                  alt={userInfo.name}
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-cover"
-                />
+                <Avatar>
+                  <AvatarImage
+                    src={userInfo?.avatar}
+                    alt={userInfo?.name}
+                    className="rounded-[6px]"
+                  />
+                  <AvatarFallback className="bg-blue-100 text-blue-600 font-medium">
+                    {getInitials(userInfo?.name)}
+                  </AvatarFallback>
+                </Avatar>
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold text-gray-900">

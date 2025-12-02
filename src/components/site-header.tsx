@@ -1,8 +1,7 @@
 "use client";
 
-import { Search, Bell, ChevronDown, LogOut, User, Menu } from "lucide-react";
+import { Bell, ChevronDown, LogOut, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -18,9 +17,9 @@ export function SiteHeader() {
   // Use useMemo to decode token only once
   const user = useMemo(() => {
     const token = getCookie("accessToken");
-    
+
     if (!token) return null;
-    
+
     try {
       return jwtDecode<TCustomJwtPayload>(token);
     } catch (err) {
@@ -57,17 +56,6 @@ export function SiteHeader() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4 ml-auto">
-          {/* Search */}
-          <div className="relative hidden md:block w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              aria-label="Search"
-              placeholder="Search..."
-              className="pl-10 bg-secondary"
-            />
-          </div>
-
           {/* Notification */}
           <Button
             variant="ghost"
@@ -110,7 +98,7 @@ export function SiteHeader() {
                 Profile
               </DropdownMenuItem>
 
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 className="text-red-600 focus:text-red-600"
                 onClick={handleLogout}
               >

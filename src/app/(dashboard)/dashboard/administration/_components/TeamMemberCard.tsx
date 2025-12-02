@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { AdminUser } from "@/types/admin.types";
+import { getInitials } from "@/utils/getIntials";
 
 interface TeamMemberCardProps {
   member: AdminUser;
@@ -16,19 +17,12 @@ const TeamMemberCard = ({
   onEdit,
   onPermissions,
 }: TeamMemberCardProps) => {
-  const getInitials = (name: string) => {
-    return name
-      ?.split(" ")
-      ?.map((n) => n[0])
-      ?.join("")
-      ?.toUpperCase()
-      ?.slice(0, 2);
-  };
+
 
   return (
-    <div className="flex items-center justify-between border hover:bg-muted/50 transition-colors rounded-lg p-2.5">
-      <div className="flex items-center gap-4">
-        <Avatar className="size-[60px]">
+    <div className="flex flex-col min-[510px]:flex-row min-[510px]:items-center min-[510px]:justify-between border hover:bg-muted/50 transition-colors rounded-lg p-2.5 gap-3 min-[510px]:gap-0">
+      <div className="flex items-center gap-3 min-[510px]:gap-4">
+        <Avatar className="size-12 min-[510px]:size-[60px]">
           <AvatarImage
             src={member.avatar}
             alt={member.name}
@@ -38,32 +32,32 @@ const TeamMemberCard = ({
             {getInitials(member?.name)}
           </AvatarFallback>
         </Avatar>
-        <div className="flex flex-col">
-          <span className="font-medium text-[16px] font-nunito text-[#202224]">
+        <div className="flex flex-col min-w-0">
+          <span className="font-medium text-sm min-[510px]:text-[16px] font-nunito text-[#202224] truncate">
             {member.name}
           </span>
-          <span className="text-xs text-muted-foreground font-nunito">
+          <span className="text-xs text-muted-foreground font-nunito truncate">
             {member.email}
           </span>
-          <span className="text-sm text-[#202224] font-nunito">
+          <span className="text-xs min-[510px]:text-sm text-[#202224] font-nunito">
             {member.role}
           </span>
         </div>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 min-[510px]:gap-3 ml-auto min-[510px]:ml-0">
         <Button
           variant="ghost"
           size="sm"
-          className="text-muted-foreground border hover:text-foreground gap-1.5"
+          className="text-muted-foreground border hover:text-foreground gap-1 min-[510px]:gap-1.5 text-xs min-[510px]:text-sm px-2 min-[510px]:px-3"
           onClick={() => onEdit?.(member)}
         >
-          <Edit className="size-4" />
+          <Edit className="size-3 min-[510px]:size-4" />
           Edit
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="text-blue-600 border-blue-200 bg-[#E7F2FF] hover:text-blue-700"
+          className="text-blue-600 border-blue-200 bg-[#E7F2FF] hover:text-blue-700 text-xs min-[510px]:text-sm px-2 min-[510px]:px-3"
           onClick={() => onPermissions?.(member)}
         >
           Permissions
