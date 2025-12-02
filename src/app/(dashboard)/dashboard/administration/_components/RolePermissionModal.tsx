@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -8,16 +8,15 @@ import { Switch } from "@/components/ui/switch";
 import { X, Loader2 } from "lucide-react";
 import teamIcon from "../../../../assets/role.svg";
 import Image from "next/image";
-
-export type RolePermissionValues = {
-  features: number[];
-};
+import { AdminUser } from "@/types/admin.types";
+import { CreateUserValues } from "@/validation/adminstration.validation";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm: (values: RolePermissionValues) => void;
+  onConfirm: () => void;
   isSubmitting?: boolean;
+  currentUser?: AdminUser;
 }
 
 export default function RolePermissionModal({
@@ -25,24 +24,23 @@ export default function RolePermissionModal({
   onOpenChange,
   onConfirm,
   isSubmitting = false,
+  currentUser,
 }: Props) {
-  const form = useForm<RolePermissionValues>({
-    defaultValues: {
-      features: [],
-    },
-  });
+  // Use form context from parent
+  const form = useFormContext<CreateUserValues>();
+  const features = form.watch("features") || [];
 
-  const submit = (values: RolePermissionValues) => {
-    console.log('Selected features:', values.features);
-    onConfirm(values);
-  };
-
-  const toggleFeature = (index: number) => {
-    const currentFeatures = form.getValues('features');
+  // Toggle feature selection
+  const handleToggleFeature = (index: number) => {
+    const currentFeatures = form.getValues("features") || [];
     const newFeatures = currentFeatures.includes(index)
       ? currentFeatures.filter((f) => f !== index)
       : [...currentFeatures, index];
     form.setValue('features', newFeatures);
+  };
+
+  const submit = () => {
+    onConfirm();
   };
 
   return (
@@ -97,7 +95,9 @@ export default function RolePermissionModal({
                     Role Permission
                   </h2>
                   <p className="text-sm text-gray-500">
-                    Give feature permission to your user
+                    {currentUser 
+                      ? `Manage permissions for ${currentUser.name}` 
+                      : "Give feature permission to your user"}
                   </p>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function RolePermissionModal({
               {/* Form */}
               <div className="px-6 pb-6">
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(submit)}>
+                  <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
                     {/* Permissions Grid */}
                     <div className="grid grid-cols-3 gap-x-6 gap-y-6 mb-6">
                       <div className="flex flex-col items-center gap-2">
@@ -113,8 +113,8 @@ export default function RolePermissionModal({
                           Overview
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(0)}
-                          onCheckedChange={() => toggleFeature(0)}
+                          checked={features.includes(0)}
+                          onCheckedChange={() => handleToggleFeature(0)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
@@ -125,8 +125,8 @@ export default function RolePermissionModal({
                           Facebook Pages
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(1)}
-                          onCheckedChange={() => toggleFeature(1)}
+                          checked={features.includes(1)}
+                          onCheckedChange={() => handleToggleFeature(1)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
@@ -137,8 +137,8 @@ export default function RolePermissionModal({
                           Post & Schedule
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(2)}
-                          onCheckedChange={() => toggleFeature(2)}
+                          checked={features.includes(2)}
+                          onCheckedChange={() => handleToggleFeature(2)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
@@ -149,8 +149,8 @@ export default function RolePermissionModal({
                           Insights
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(3)}
-                          onCheckedChange={() => toggleFeature(3)}
+                          checked={features.includes(3)}
+                          onCheckedChange={() => handleToggleFeature(3)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
@@ -161,8 +161,8 @@ export default function RolePermissionModal({
                           Support
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(4)}
-                          onCheckedChange={() => toggleFeature(4)}
+                          checked={features.includes(4)}
+                          onCheckedChange={() => handleToggleFeature(4)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
@@ -173,8 +173,8 @@ export default function RolePermissionModal({
                           Settings
                         </div>
                         <Switch
-                          checked={form.watch('features').includes(5)}
-                          onCheckedChange={() => toggleFeature(5)}
+                          checked={features.includes(5)}
+                          onCheckedChange={() => handleToggleFeature(5)}
                           disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />

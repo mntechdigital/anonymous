@@ -19,7 +19,7 @@ export const getAdmins = async (): Promise<AdminUser[]> => {
   return await apiRequest(ADMIN_BASE, {
     method: "GET",
     authRequired: true,
-  }) as Promise<AdminUser[]>;
+  });
 };
 
 export const getAdminById = async (id: string): Promise<AdminUser> => {
@@ -54,7 +54,7 @@ export const addFeatures = async (
 ): Promise<AdminUser> => {
 
   return await apiRequest(`${ADMIN_BASE}/${adminUserId}/features`, {
-    method: "PUT",
+    method: "POST",
     body: JSON.stringify({ features: featureIndexes }),
     authRequired: true,
   });

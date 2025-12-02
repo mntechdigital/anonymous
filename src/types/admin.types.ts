@@ -1,5 +1,7 @@
 export type CreateAdminPayload = {
   email: string;
+  name: string;
+  avatar?: string;
   password: string;
   role?: string;
   features?: number[];
@@ -14,6 +16,8 @@ export type AdminFeature = {
 
 export type AdminUser = {
   id: string;
+  name: string;
+  avatar?: string;
   email: string;
   role: string;
   createdAt: string;

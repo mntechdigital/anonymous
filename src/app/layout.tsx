@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${inter.variable} ${nunitoSans.variable} antialiased`}
       >
         {children}
-        <Toaster position="top-right" richColors />
+        <Toaster position="bottom-left" richColors />
       </body>
     </html>
   );
