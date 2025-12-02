@@ -255,7 +255,7 @@ export default function CreateUserModal({ open, onOpenChange, onNext }: Props) {
                         type="submit"
                         className="flex-1 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
                       >
-                        Confirm
+                        Next
                       </Button>
                     </div>
                   </form>

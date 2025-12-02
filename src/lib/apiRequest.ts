@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { getAccessToken } from "./getAccessToken";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL as string;
+const API_BASE_URL = (process.env.NEXT_PUBLIC_BACKEND_URL) as string;
 
 // Detect runtime environment
 const isServer = typeof window === "undefined";

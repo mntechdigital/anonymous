@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
 import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import teamIcon from "../../../../assets/role.svg";
 import Image from "next/image";
 
@@ -18,12 +17,14 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: (values: RolePermissionValues) => void;
+  isSubmitting?: boolean;
 }
 
 export default function RolePermissionModal({
   open,
   onOpenChange,
   onConfirm,
+  isSubmitting = false,
 }: Props) {
   const form = useForm<RolePermissionValues>({
     defaultValues: {
@@ -34,7 +35,6 @@ export default function RolePermissionModal({
   const submit = (values: RolePermissionValues) => {
     console.log('Selected features:', values.features);
     onConfirm(values);
-    onOpenChange(false);
   };
 
   const toggleFeature = (index: number) => {
@@ -55,7 +55,7 @@ export default function RolePermissionModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => onOpenChange(false)}
+            onClick={() => !isSubmitting && onOpenChange(false)}
           />
 
           {/* Modal */}
@@ -76,7 +76,8 @@ export default function RolePermissionModal({
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="absolute top-4 right-4 text-gray-600 hover:text-gray-600 transition"
+                disabled={isSubmitting}
+                className="absolute top-4 right-4 text-gray-600 hover:text-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -114,6 +115,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(0)}
                           onCheckedChange={() => toggleFeature(0)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -125,6 +127,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(1)}
                           onCheckedChange={() => toggleFeature(1)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -136,6 +139,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(2)}
                           onCheckedChange={() => toggleFeature(2)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -147,6 +151,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(3)}
                           onCheckedChange={() => toggleFeature(3)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -158,6 +163,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(4)}
                           onCheckedChange={() => toggleFeature(4)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -169,6 +175,7 @@ export default function RolePermissionModal({
                         <Switch
                           checked={form.watch('features').includes(5)}
                           onCheckedChange={() => toggleFeature(5)}
+                          disabled={isSubmitting}
                           className="data-[state=checked]:bg-blue-500 scale-150"
                         />
                       </div>
@@ -181,14 +188,23 @@ export default function RolePermissionModal({
                         variant="outline"
                         className="flex-1 border-gray-200 rounded-sm hover:bg-gray-50"
                         onClick={() => onOpenChange(false)}
+                        disabled={isSubmitting}
                       >
                         Cancel
                       </Button>
                       <Button
                         type="submit"
                         className="flex-1 rounded-sm bg-blue-500 hover:bg-blue-600 text-white"
+                        disabled={isSubmitting}
                       >
-                        Confirm
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          'Confirm'
+                        )}
                       </Button>
                     </div>
                   </form>
