@@ -89,7 +89,8 @@ export function SiteHeader() {
                 <Avatar className="h-9 w-9">
                   <AvatarImage
                     src="https://github.com/shadcn.png"
-                    alt={user?.email ?? "User"}
+                    alt="Admin"
+                    className="rounded-full"
                   />
                   <AvatarFallback>{getUserInitials()}</AvatarFallback>
                 </Avatar>
