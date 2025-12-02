@@ -21,7 +21,7 @@ import { addFeatures, createAdmin, updateAdmin } from "@/services/admin/admin";
 import { toast } from "sonner";
 import { AdminUser } from "@/types/admin.types";
 import { useRouter } from "next/navigation";
-import { CreateUserValues, userSchema } from "@/validation/adminstration.validation";
+import { CreateUserValues, userSchema } from "@/validation/administration.validation";
 
 interface TeamMembersListProps {
   title: string;
@@ -142,6 +142,8 @@ const TeamMembersList = ({
         await createAdmin(payload);
         toast.success("User created successfully", {
           description: `${pendingUser.name} has been added to your team.`,
+          dismissible: true,
+          closeButton: true
         });
       }
 
@@ -183,17 +185,17 @@ const TeamMembersList = ({
   };
 
   return (
-    <Card className="shadow-none">
-      <CardHeader>
+    <Card className="shadow-none rounded-[12px]">
+      <CardHeader className="flex-col min-[510px]:flex-row gap-3 min-[510px]:gap-0">
         <div className="items-center my-auto">
-          <CardTitle className="text-lg font-nunito">{title}</CardTitle>
+          <CardTitle className="text-base min-[510px]:text-lg font-nunito">{title}</CardTitle>
           {description && (
-            <CardDescription className="font-nunito text-[12px]">
+            <CardDescription className="font-nunito text-[11px] min-[510px]:text-[12px]">
               {description}
             </CardDescription>
           )}
         </div>
-        <CardAction className="self-center justify-self-end">
+        <CardAction className="self-start min-[510px]:self-center justify-self-start min-[510px]:justify-self-end">
           <>
             <Button
               size="sm"
@@ -223,9 +225,9 @@ const TeamMembersList = ({
       </CardHeader>
       <CardContent className="px-5">
         <div className="space-y-4">
-          {members.map((member) => (
+          {members?.map((member) => (
             <TeamMemberCard
-              key={member.id}
+              key={member?.id}
               member={member}
               onEdit={handleEditMember}
               onPermissions={handleMemberPermissions}

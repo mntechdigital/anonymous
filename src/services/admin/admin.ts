@@ -1,7 +1,7 @@
 "use server"
 
 import { apiRequest } from "@/lib/apiRequest";
-import { AdminUser, CreateAdminPayload } from "@/types/admin.types";
+import { AdminUser, ApiResponse, CreateAdminPayload } from "@/types/admin.types";
 
 const ADMIN_BASE = `admin`;
 
@@ -16,10 +16,16 @@ export const createAdmin = async (
 };
 
 export const getAdmins = async (): Promise<AdminUser[]> => {
-  return await apiRequest(ADMIN_BASE, {
+  const response: ApiResponse<AdminUser[]> = await apiRequest(ADMIN_BASE, {
     method: "GET",
     authRequired: true,
   });
+
+  if (response.success && response.data) {
+    return response.data;
+  }
+
+  return [];
 };
 
 export const getAdminById = async (id: string): Promise<AdminUser> => {

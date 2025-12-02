@@ -24,3 +24,13 @@ export type AdminUser = {
   updatedAt: string;
   features: AdminFeature[];
 };
+
+export type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data?: T;
+  error?: {
+    statusCode: number;
+    message: string;
+  };
+};

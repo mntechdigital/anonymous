@@ -5,7 +5,7 @@ interface DashboardHeaderProps {
 
 const DashboardHeader = ({ title, description }: DashboardHeaderProps) => {
   return (
-    <div className="flex flex-1 flex-col animate-fade-in">
+    <div className="flex flex-1 flex-col animate-fade-in px-5 lg:px-6 pb-6">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-6 md:gap-8 pt-6">
           <div className="">

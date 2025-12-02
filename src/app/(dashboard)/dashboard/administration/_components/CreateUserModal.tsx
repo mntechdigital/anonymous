@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { X, Eye, EyeOff } from "lucide-react";
 import teamIcon from "../../../../assets/fluent-color_people-team-24.svg";
 import Image from "next/image";
-import { CreateUserValues } from "@/validation/adminstration.validation";
+import { CreateUserValues } from "@/validation/administration.validation";
 
 
 interface Props {
