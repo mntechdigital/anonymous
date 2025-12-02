@@ -9,21 +9,8 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.FACEBOOK_APP_SECRET as string,
       authorization: {
         params: {
-          scope: (() => {
-            const baseScopes = ["email", "public_profile"];
-            const pageScopes = [
-              "pages_show_list",
-              "pages_read_engagement",
-              "pages_manage_posts",
-              "pages_manage_metadata",
-            ];
-            const includePageScopes =
-              process.env.FACEBOOK_REQUEST_PAGES_SCOPE === "true";
-            return [
-              ...baseScopes,
-              ...(includePageScopes ? pageScopes : []),
-            ].join(",");
-          })(),
+          scope:
+            "email,public_profile,pages_show_list,pages_read_engagement,pages_manage_posts,pages_manage_metadata",
         },
       },
     }),
