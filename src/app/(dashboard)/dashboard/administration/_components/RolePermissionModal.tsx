@@ -159,7 +159,7 @@ export default function RolePermissionModal({
 
                       <div className="flex flex-col items-center gap-1.5 min-[420px]:gap-2">
                         <div className="text-[10px] min-[420px]:text-xs font-medium text-gray-700 mb-1 min-[420px]:mb-1.5">
-                          Support
+                          Polls
                         </div>
                         <Switch
                           checked={features.includes(4)}
@@ -171,7 +171,7 @@ export default function RolePermissionModal({
 
                       <div className="flex flex-col items-center gap-1.5 min-[420px]:gap-2">
                         <div className="text-[10px] min-[420px]:text-xs font-medium text-gray-700 mb-1 min-[420px]:mb-1.5">
-                          Settings
+                          Administration
                         </div>
                         <Switch
                           checked={features.includes(5)}
@@ -180,6 +180,31 @@ export default function RolePermissionModal({
                           className="data-[state=checked]:bg-blue-500 scale-125 min-[420px]:scale-150"
                         />
                       </div>
+
+                      <div className="flex flex-col items-center gap-1.5 min-[420px]:gap-2">
+                        <div className="text-[10px] min-[420px]:text-xs font-medium text-gray-700 mb-1 min-[420px]:mb-1.5">
+                          Settings
+                        </div>
+                        <Switch
+                          checked={features.includes(6)}
+                          onCheckedChange={() => handleToggleFeature(6)}
+                          disabled={isSubmitting}
+                          className="data-[state=checked]:bg-blue-500 scale-125 min-[420px]:scale-150"
+                        />
+                      </div>
+
+                      <div className="flex flex-col items-center gap-1.5 min-[420px]:gap-2">
+                        <div className="text-[10px] min-[420px]:text-xs font-medium text-gray-700 mb-1 min-[420px]:mb-1.5">
+                          Profile
+                        </div>
+                        <Switch
+                          checked={features.includes(7)}
+                          onCheckedChange={() => handleToggleFeature(7)}
+                          disabled={isSubmitting}
+                          className="data-[state=checked]:bg-blue-500 scale-125 min-[420px]:scale-150"
+                        />
+                      </div>
+
                     </div>
 
                     {/* Actions */}

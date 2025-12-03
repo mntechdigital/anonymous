@@ -28,7 +28,7 @@ const TeamMemberCard = ({
             alt={member.name}
             className="rounded-[6px]"
           />
-          <AvatarFallback className="bg-blue-100 text-blue-600 font-medium">
+          <AvatarFallback className="bg-blue-100 text-blue-600 font-medium rounded-[6px]">
             {getInitials(member?.name)}
           </AvatarFallback>
         </Avatar>
