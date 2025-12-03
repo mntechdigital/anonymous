@@ -1,4 +1,5 @@
-import DashboardLoadingSkeleton from '@/components/shared/skleton/DashboardLoading';
+import { DashboardLoadingSkeleton } from "@/components/shared/DashboardSkeleton";
+
 
 const loading = () => {
     return (
