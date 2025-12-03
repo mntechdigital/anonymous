@@ -4,13 +4,15 @@ import QuickOverview from "../_components/QuickOverview";
 
 const DashboardHome = () => {
   return (
-    <div className="flex flex-col gap-8 p-4 md:p-5 lg:p-6">
+    <div className="">
       <DashboardHeader
         title="Dashboard Overview"
         description="Welcome! Monitor and manage your Facebook pages performance"
       />
-      <QuickOverview />
-      <ChartSection/>
+      <div className="px-5 lg:px-6 pb-6 flex flex-col gap-6">
+        <QuickOverview />
+        <ChartSection />
+      </div>
     </div>
   );
 };

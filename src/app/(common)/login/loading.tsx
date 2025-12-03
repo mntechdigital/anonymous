@@ -2,11 +2,7 @@ import { DashboardLoadingSkeleton } from "@/components/shared/DashboardSkeleton"
 
 
 const loading = () => {
-    return (
-        <div>
-            <DashboardLoadingSkeleton/>
-        </div>
-    );
+  return <DashboardLoadingSkeleton />;
 };
 
 export default loading;

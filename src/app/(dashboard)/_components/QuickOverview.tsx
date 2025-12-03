@@ -1,4 +1,11 @@
-import { TrendingUp, TrendingDown, BarChart3, Heart, Users, Flag } from "lucide-react"
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  Heart,
+  Users,
+  Flag,
+} from "lucide-react";
 
 export default function QuickOverview() {
   const stats = [
@@ -42,44 +49,47 @@ export default function QuickOverview() {
       trendType: "down",
       trendValue: "-4.3%",
     },
-  ]
+  ];
 
   return (
-    <main className="">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon
-          return (
-            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <p className="text-sm text-gray-500 mb-2">{stat.label}</p>
-                  <p className="text-4xl font-bold text-gray-900">{stat.value}</p>
-                </div>
-                <div className={`${stat.bgColor} rounded-full p-3`}>
-                  <Icon className={`${stat.iconColor} w-6 h-6`} />
-                </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {stats.map((stat, index) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={index}
+            className="bg-white border border-gray-200 rounded-lg p-6"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-2">{stat.label}</p>
+                <p className="text-4xl font-bold text-gray-900">{stat.value}</p>
               </div>
-
-              <div className="flex items-center gap-2">
-                {stat.trendType === "up" && (
-                  <>
-                    <TrendingUp className="w-4 h-4 text-cyan-500" />
-                    <span className="text-sm text-cyan-500">{stat.trend}</span>
-                  </>
-                )}
-                {stat.trendType === "down" && (
-                  <>
-                    <TrendingDown className="w-4 h-4 text-red-500" />
-                    <span className="text-sm text-red-500">{stat.trend}</span>
-                  </>
-                )}
-                {stat.trendType === "neutral" && <span className="text-sm text-cyan-500">{stat.trend}</span>}
+              <div className={`${stat.bgColor} rounded-full p-3`}>
+                <Icon className={`${stat.iconColor} w-6 h-6`} />
               </div>
             </div>
-          )
-        })}
-      </div>
-    </main>
-  )
+
+            <div className="flex items-center gap-2">
+              {stat.trendType === "up" && (
+                <>
+                  <TrendingUp className="w-4 h-4 text-cyan-500" />
+                  <span className="text-sm text-cyan-500">{stat.trend}</span>
+                </>
+              )}
+              {stat.trendType === "down" && (
+                <>
+                  <TrendingDown className="w-4 h-4 text-red-500" />
+                  <span className="text-sm text-red-500">{stat.trend}</span>
+                </>
+              )}
+              {stat.trendType === "neutral" && (
+                <span className="text-sm text-cyan-500">{stat.trend}</span>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
