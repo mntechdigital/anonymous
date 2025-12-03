@@ -110,12 +110,12 @@ export default function SecurityPage() {
             {/* Card Container */}
             <motion.div
                 variants={itemVariants}
-                className="bg-white rounded-2xl border-[0.5px] border-[#E8E8E8] py-6 px-5"
+                className="bg-white rounded-[12px] border-[0.5px] border-[#E8E8E8] py-6 px-5"
             >
                 {/* Section Header */}
                 <div className="mb-6">
                     <h2 className="text-lg font-bold text-gray-900 font-nunito">Change Password</h2>
-                    <p className="text-sm font-semibold text-gray-500 mt-1 font-nunito">
+                    <p className="text-xs font-semibold text-gray-500 font-nunito">
                         Update your password to keep your account secure
                     </p>
                 </div>
