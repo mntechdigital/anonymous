@@ -1,17 +1,13 @@
-import { AppSidebar } from "@/components/app-sidebar";
+// import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { demoSidebarData } from "../test/demo-sidebar-data";
-// import { getAdminDetails } from "@/services/auth";
+import AppSidebar from "@/components/app-sidebar";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
-  // const adminDetails = await getAdminDetails();
-
   return (
     <SidebarProvider
       style={
@@ -21,20 +17,14 @@ export default async function DashboardLayout({
         } as React.CSSProperties
       }
     >
-      {/* <AppSidebar variant="inset" data={demoSidebarData}/> */}
-      <AppSidebar variant="inset" data={{
-        roleFeature: "admin",
-        user: {
-          name: "Reshad",
-          email: "reshad@gmail.com",
-          avatar: "/avatar.png",
-        },
-        mainMenu: ["Dashboard", "Users", "Settings"],
-        footerMenu: [],
-      }} />
-      <SidebarInset>
-        <SiteHeader />
-        {children}
+      <AppSidebar />
+      <SidebarInset className="flex flex-col h-screen overflow-hidden">
+        <div className="shrink-0 sticky top-0">
+          <SiteHeader />
+        </div>
+        <main className="flex-1 overflow-auto">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );
