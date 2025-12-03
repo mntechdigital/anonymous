@@ -97,16 +97,6 @@ export const forgetPassword = async (data: FieldValues) => {
   return await response;
 };
 
-export const changePassword = async (data: FieldValues) => {
-  const response = await apiRequest("auth/change-password", {
-    method: "POST",
-    body: JSON.stringify(data),
-    authRequired: true,
-  });
-
-  return await response;
-};
-
 export const resetPassword = async (data: FieldValues) => {
   const response = await apiRequest("auth/reset-password", {
     method: "POST",
@@ -114,6 +104,19 @@ export const resetPassword = async (data: FieldValues) => {
   });
 
   return response;
+};
+
+export const changePassword = async (data: {
+  oldPassword: string;
+  newPassword: string;
+}) => {
+  const response = await apiRequest("auth/change-password", {
+    method: "PUT",
+    body: JSON.stringify(data),
+    authRequired: true,
+  });
+
+  return await response;
 };
 
 export const updateProfile = async (data: FormData) => {
