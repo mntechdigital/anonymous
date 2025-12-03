@@ -3,6 +3,7 @@ import { JwtPayload } from "jwt-decode";
 
 export interface TCustomJwtPayload extends JwtPayload {
   id?: string;
+  name?: string;
   email: string;
   role: string;
   status: string;
@@ -10,6 +11,15 @@ export interface TCustomJwtPayload extends JwtPayload {
   iat: number;
   exp: number;
 }
+
+export interface IUser { 
+  id?: string; 
+  email?: string; 
+  role?: string
+  name?: string;
+  avatar?: string;
+ }
+
 
 export type TRole = {
   id: string;
