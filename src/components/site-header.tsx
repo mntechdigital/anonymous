@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronDown, LogOut, User, Menu } from "lucide-react";
+import { Bell, ChevronDown, LogOut, User, Menu, BellDot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
@@ -55,7 +55,7 @@ export function SiteHeader() {
         </Button>
 
         {/* Right Section */}
-        <div className="flex items-center gap-4 ml-auto">
+        <div className="flex items-center ml-auto">
           {/* Notification */}
           <Button
             variant="ghost"
@@ -63,9 +63,7 @@ export function SiteHeader() {
             aria-label="Notifications"
             className="relative"
           >
-            <Bell className="h-5 w-5" />
-            {/* Notification Dot */}
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
+            <BellDot className="h-5 w-5 text-blue-500" />
           </Button>
 
           {/* User Dropdown */}
