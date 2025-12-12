@@ -138,7 +138,7 @@ const TeamMembersList = ({
           role: pendingUser.roleName || "ADMIN",
           features: features,
         };
-        
+
         await createAdmin(payload);
         toast.success("User created successfully", {
           description: `${pendingUser.name} has been added to your team.`,
@@ -152,6 +152,8 @@ const TeamMembersList = ({
         await addFeatures(targetAdminId, features);
         toast.success("Permissions updated successfully", {
           description: "User permissions have been updated.",
+          dismissible: true,
+          closeButton: true
         });
       }
 
@@ -164,6 +166,8 @@ const TeamMembersList = ({
       console.error(err);
       toast.error("Operation failed", {
         description: err?.message || "Something went wrong. Please try again.",
+        dismissible: true,
+        closeButton: true
       });
     } finally {
       setSubmitting(false);

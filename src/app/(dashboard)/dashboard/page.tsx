@@ -9,8 +9,10 @@ const DashboardHome = () => {
         title="Dashboard Overview"
         description="Welcome! Monitor and manage your Facebook pages performance"
       />
-      <QuickOverview />
-      <ChartSection/>
+      <div className="px-5 lg:px-6 pb-6 flex flex-col gap-6">
+        <QuickOverview />
+        <ChartSection />
+      </div>
     </div>
   );
 };

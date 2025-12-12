@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log(user, account, profile);
+
       const pageUserData = {
         ...user,
         providerAccountId: account?.providerAccountId,

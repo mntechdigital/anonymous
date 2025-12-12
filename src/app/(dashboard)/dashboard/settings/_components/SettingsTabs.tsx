@@ -34,8 +34,8 @@ export default function SettingsTabs({ children }: { children: React.ReactNode }
                                     initial={false}
                                     transition={{
                                         type: "spring",
-                                        stiffness: 400,
-                                        damping: 30,
+                                        stiffness: 700,
+                                        damping: 50,
                                     }}
                                 />
                             )}
@@ -53,13 +53,11 @@ export default function SettingsTabs({ children }: { children: React.ReactNode }
             {/* Animated Content Area */}
             <motion.div
                 key={pathname}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 2 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -2 }}
                 transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
+                    duration: 0.15,
                 }}
                 className="py-6"
             >
