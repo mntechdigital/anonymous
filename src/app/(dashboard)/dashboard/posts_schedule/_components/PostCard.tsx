@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 
 interface Post {
@@ -27,64 +26,38 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const publishDate = new Date(post.scheduled_publish_time * 1000);
-  const createdDate = new Date(post.createdAt);
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+  const getStatusBadgeColor = (published: boolean) => {
+    return published ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700";
+  };
+
+  const getStatusLabel = (published: boolean) => {
+    return published ? "Published" : "Scheduled";
   };
 
   return (
-    <Card className="p-4 mb-4 hover:shadow-lg transition-shadow">
-      <div className="flex gap-4">
-        {/* Page Avatar */}
-        <Avatar className="h-12 w-12 flex-shrink-0">
-          <AvatarImage src={post.page.image} alt={post.page.name} />
-          <AvatarFallback>{getInitials(post.page.name)}</AvatarFallback>
-        </Avatar>
+    <Card className="p-4 mb-3 bg-white border border-gray-200 hover:shadow-md transition-shadow">
+      <div className="flex flex-col gap-3">
+        {/* Status Badge */}
+        <div className="flex items-center justify-start">
+          <span className={`${getStatusBadgeColor(post.published)} text-xs font-semibold px-3 py-1 rounded-full`}>
+            {getStatusLabel(post.published)}
+          </span>
+        </div>
 
         {/* Post Content */}
-        <div className="flex-1">
-          {/* Header with page name and status badge */}
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <p className="font-semibold text-sm">{post.page.name}</p>
-              <p className="text-xs text-gray-500">{post.page.category}</p>
-            </div>
-            <div className="flex gap-2">
-              {post.published ? (
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-md">
-                  Published
-                </span>
-              ) : (
-                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-md">
-                  Scheduled
-                </span>
-              )}
-            </div>
-          </div>
+        <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
+          {post.content}
+        </p>
 
-          {/* Post Content Text */}
-          <p className="text-sm text-gray-700 mb-3 line-clamp-3">
-            {post.content}
-          </p>
-
-          {/* Footer with timestamps */}
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <div className="flex gap-4">
-              <span>
-                Created: {formatDistanceToNow(createdDate, { addSuffix: true })}
-              </span>
-              <span>
-                {post.published ? "Published" : "Publishing"}:{" "}
-                {formatDistanceToNow(publishDate, { addSuffix: true })}
-              </span>
-            </div>
-            <span className="text-gray-400">#ID: {post.id.slice(0, 8)}</span>
-          </div>
+        {/* Footer with timestamp and more info */}
+        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span className="text-xs text-gray-500">
+            📅 {formatDistanceToNow(publishDate, { addSuffix: true })}
+          </span>
+          <a href="#" className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+            More info
+          </a>
         </div>
       </div>
     </Card>
