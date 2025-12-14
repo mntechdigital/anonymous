@@ -9,7 +9,6 @@ import Pages from "./_components/Pages";
 
 const FacebookPages = async () => {
   const facebookPages = await getAllPages([]);
-  console.log(facebookPages);
   return (
     <div className="p-6">
       <DashboardHeader
