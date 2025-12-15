@@ -148,6 +148,79 @@ export interface SinglePageResponse {
   data: TPage;
 }
 
+// Facebook Post Types
+export interface PostImage {
+  height: number;
+  src: string;
+  width: number;
+}
+
+export interface PostMedia {
+  image: PostImage;
+}
+
+export interface PostTarget {
+  id: string;
+  url: string;
+}
+
+export interface PostSubAttachment {
+  media: PostMedia;
+  target: PostTarget;
+  type: string;
+  url: string;
+}
+
+export interface PostSubAttachments {
+  data: PostSubAttachment[];
+}
+
+export interface PostAttachment {
+  media?: PostMedia;
+  subattachments?: PostSubAttachments;
+  target: PostTarget;
+  title?: string;
+  type: string;
+  url: string;
+}
+
+export interface PostAttachments {
+  data: PostAttachment[];
+}
+
+export interface PostCommentsSummary {
+  order: string;
+  total_count: number;
+  can_comment: boolean;
+}
+
+export interface PostComments {
+  data: any[];
+  summary: PostCommentsSummary;
+}
+
+export interface PostLikesSummary {
+  total_count: number;
+  can_like: boolean;
+  has_liked: boolean;
+}
+
+export interface PostLikes {
+  data: any[];
+  summary: PostLikesSummary;
+}
+
+export interface FacebookPost {
+  id: string;
+  message?: string;
+  created_time: string;
+  permalink_url: string;
+  full_picture?: string;
+  attachments?: PostAttachments;
+  comments: PostComments;
+  likes: PostLikes;
+}
+
 // Specific Insights Metric Types for easier access
 export interface PageFansCountry {
   [countryCode: string]: number;
