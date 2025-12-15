@@ -17,7 +17,17 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "platform-lookaside.fbsbx.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**.fbcdn.net",
         pathname: "/**",
       },
     ],
