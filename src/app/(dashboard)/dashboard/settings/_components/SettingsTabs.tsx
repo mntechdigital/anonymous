@@ -25,7 +25,7 @@ export default function SettingsTabs({ children }: { children: React.ReactNode }
                         <button
                             key={tab.id}
                             onClick={() => router.push(tab.href)}
-                            className="relative px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap"
+                            className="relative px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F7F7]"
                         >
                             {isActive && (
                                 <motion.div

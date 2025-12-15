@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/services/auth";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginFormData {
   email: string;
@@ -16,6 +17,8 @@ interface LoginFormData {
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
   const {
@@ -33,13 +36,16 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setErrorMessage("");
+
     const res = await login(data);
     console.log(res);
+
     if (res.statusCode === 200) {
       router.push("/dashboard");
     } else {
       setErrorMessage(res.message || "Login failed. Please try again.");
     }
+
     setIsLoading(false);
   };
 
@@ -66,6 +72,7 @@ export default function LoginForm() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
 
@@ -95,6 +102,7 @@ export default function LoginForm() {
             )}
           </div>
 
+          {/* Password Field with Show/Hide Icon */}
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
 
@@ -109,18 +117,30 @@ export default function LoginForm() {
                 },
               }}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  id="password"
-                  type="password"
-                  placeholder="Enter password..."
-                  className="border-2 border-gray-200 rounded-lg focus:border-blue-500 py-3 px-4"
-                />
+                <div className="relative">
+                  <Input
+                    {...field}
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password..."
+                    className="border-2 border-gray-200 rounded-lg focus:border-blue-500 py-3 px-4 pr-12"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 rounded-full"
+                  >
+                    {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                  </button>
+                </div>
               )}
             />
 
             {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
