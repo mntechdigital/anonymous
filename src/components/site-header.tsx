@@ -1,15 +1,19 @@
 "use client";
 
-import { Bell, ChevronDown, LogOut, User, Menu, BellDot } from "lucide-react";
+import { ChevronDown, LogOut, User, Menu, BellDot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useMemo } from "react";
 import { jwtDecode } from "jwt-decode";
 import { TCustomJwtPayload } from "@/types/auth.types";
 import getCookie from "@/utils/getCookie";
-
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
@@ -36,8 +40,10 @@ export function SiteHeader() {
 
   // Logout handler
   const handleLogout = () => {
-    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/login";
   };
 
