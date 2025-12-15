@@ -7,6 +7,11 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
+export const getUserById = async (id: string) => {
+  const response = await apiRequest(`auth/${id}`);
+  return response;
+};
+
 export const loggedUser = async () => {
   const cookie = await cookies();
   const accessToken = cookie.get("accessToken")?.value;
@@ -38,8 +43,6 @@ export const register = async (data: FormData) => {
 
   return await response;
 };
-
-
 
 export const login = async (data: FieldValues): Promise<LoginResponse> => {
   try {
@@ -73,9 +76,6 @@ export const login = async (data: FieldValues): Promise<LoginResponse> => {
     throw new Error("Login failed. Please try again.");
   }
 };
-
-
-
 
 export const logout = async () => {
   try {
@@ -115,18 +115,6 @@ export const changePassword = async (data: {
     body: JSON.stringify(data),
     authRequired: true,
   });
-
-  return await response;
-};
-
-export const updateProfile = async (data: FormData) => {
-  const response = await apiRequest(`auth/update-profile`, {
-    method: "PUT",
-    body: data as FormData,
-    authRequired: true,
-  });
-
-  revalidatePath("/dashboard/profile");
 
   return await response;
 };

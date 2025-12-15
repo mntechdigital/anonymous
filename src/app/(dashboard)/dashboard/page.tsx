@@ -4,7 +4,7 @@ import QuickOverview from "../_components/QuickOverview";
 
 const DashboardHome = () => {
   return (
-    <div className="">
+    <div>
       <DashboardHeader
         title="Dashboard Overview"
         description="Welcome! Monitor and manage your Facebook pages performance"

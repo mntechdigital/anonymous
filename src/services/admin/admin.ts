@@ -37,13 +37,16 @@ export const getAdminById = async (id: string): Promise<AdminUser> => {
 
 export const updateAdmin = async (
   id: string,
-  payload: Partial<CreateAdminPayload>
+  payload: FormData
 ): Promise<AdminUser> => {
-  return await apiRequest(`${ADMIN_BASE}/${id}`, {
+  const options = {
     method: "PATCH",
-    body: JSON.stringify(payload),
+    body: payload,
     authRequired: true,
-  });
+  };
+
+  console.log(Object.fromEntries(payload.entries()), id)
+  return await apiRequest(`${ADMIN_BASE}/${id}`, options);
 };
 
 export const deleteAdmin = async (id: string): Promise<boolean> => {

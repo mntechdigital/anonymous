@@ -1,15 +1,14 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 to-black flex flex-col items-center justify-center p-4">
       <div className="text-center max-w-md">
         <motion.h1
-          className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-2"
+          className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-600 mb-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -45,8 +44,7 @@ export default function NotFound() {
         >
           <Link
             href="/"
-            className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium 
-                                             shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+            className="px-6 py-3 rounded-lg bg-linear-to-r from-blue-500 to-purple-600 text-white font-medium  shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
           >
             Return Home
           </Link>
